@@ -19,7 +19,7 @@ app = FastAPI(title="PolicyCheck AI")
 # ── Config ────────────────────────────────────────────────────────────────────
 OLLAMA_URL   = "http://localhost:11434/api/generate"
 EMBED_URL    = "http://localhost:11434/api/embeddings"
-LLM_MODEL    = os.getenv("LLM_MODEL", "codellama:latest")
+LLM_MODEL    = os.getenv("LLM_MODEL", "qwen2.5:0.5b")
 EMBED_MODEL  = "nomic-embed-text"
 
 # ── Relevance threshold for KB matching ───────────────────────────────────────
