@@ -1,6 +1,7 @@
 services:
 
   retrieval:
+    build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-retrieval
     ports:
@@ -12,6 +13,7 @@ services:
     command: ["uvicorn", "retrieval_service:app", "--host", "0.0.0.0", "--port", "8001"]
 
   llm:
+    build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-llm
     ports:
@@ -24,6 +26,7 @@ services:
     command: ["uvicorn", "llm_service:app", "--host", "0.0.0.0", "--port", "8002"]
 
   orchestration:
+    build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-orchestration
     ports:
