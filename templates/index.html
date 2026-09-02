@@ -703,6 +703,15 @@ async function doPipelineAsk() {
 
   revealStep('s-answer', 'Complete', 'done', `<div class="result-box">${esc(data.answer)}</div>`);
 
+  const sourcesHtml = sim.results ? sim.results.map(r => `
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-input);padding:8px 12px;border-radius:8px;margin-bottom:6px;font-size:12px">
+      <span style="font-weight:600;color:var(--text-main)">${esc(r.filename || r.source)}</span>
+      <span style="font-family:'JetBrains Mono';color:var(--accent-indigo);font-weight:700">Cosine Score: ${(r.score || 0).toFixed(4)}</span>
+    </div>
+  `).join('') : 'Grounded in knowledge base policy documents.';
+
+  revealStep('s-sources', 'Done', 'done', sourcesHtml);
+
   btn.disabled = false;
   if (overallStatus) overallStatus.textContent = '';
 }
