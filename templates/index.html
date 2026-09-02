@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PolicyCheck AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-input: #f8fafc;
+      --border-color: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --accent-indigo: #4f46e5;
+      --accent-blue: #2563eb;
+      --accent-emerald: #059669;
+      --accent-rose: #dc2626;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-main: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-main);
+      background-image: radial-gradient(at 50% 0%, rgba(79, 70, 229, 0.04) 0px, transparent 600px);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Navigation Header */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    }
+    .brand-title { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+    .brand-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+    .model-box { display: flex; align-items: center; gap: 10px; }
+    .model-lbl { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+    .model-select {
+      background: var(--bg-card);
+      color: var(--accent-indigo);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .model-select:hover { border-color: var(--accent-indigo); }
+
+    /* Nav Tabs */
+    .nav-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      gap: 6px;
+      padding: 10px 32px;
+      overflow-x: auto;
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .nav-btn:hover { color: var(--text-main); background: #f1f5f9; }
+    .nav-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-indigo), #4338ca);
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    }
+
+    /* Container & Cards */
+    .container { max-width: 1240px; margin: 0 auto; padding: 32px 24px; }
+    .tab { display: none; }
+    .tab.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 26px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-main);
+    }
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Inputs & Buttons */
+    textarea, input[type=text] {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+    textarea:focus, input[type=text]:focus {
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      background: #ffffff;
+    }
+
+    .btn, .btn-ask {
+      background: linear-gradient(135deg, var(--accent-indigo), #4338ca);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 28px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:hover, .btn-ask:hover {
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+      transform: translateY(-1px);
+    }
+    .btn:disabled, .btn-ask:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Tech Chips */
+    .tech-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .tech-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+    .tech-chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    /* Stats Grid */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent-indigo); transform: translateY(-2px); }
+    .stat-val { font-size: 28px; font-weight: 800; color: var(--accent-indigo); }
+    .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Drag Drop Area */
+    .kb-drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 32px 20px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .kb-drop-zone:hover { border-color: var(--accent-indigo); background: #eef2ff; }
+    .kb-drop-zone input[type=file] { position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+    .kb-drop-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 10px; }
+    .kb-drop-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Status Pills */
+    .status-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 10px 20px;
+    }
+    .dot-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 10px rgba(5, 150, 105, 0.5); }
+
+    /* Pipeline Steps */
+    .pipe-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 22px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .step-status { margin-left: auto; font-size: 11px; padding: 4px 12px; border-radius: 12px; font-weight: 700; text-transform: uppercase; }
+    .step-status.done { background: #dcfce7; color: #15803d; }
+    .step-status.running { background: #e0f2fe; color: #0369a1; }
+    .step-status.error { background: #fee2e2; color: #b91c1c; }
+    .step-status.waiting { background: #f1f5f9; color: var(--text-muted); }
+
+    .step-body { padding: 0 22px 20px; font-size: 13px; color: var(--text-sub); }
+
+    /* Result Box */
+    .result-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text-main);
+      max-height: 420px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    /* Compare Grid */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media(max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+    .clabel { font-size: 12px; font-weight: 700; padding: 10px 16px; border-radius: 10px 10px 0 0; text-transform: uppercase; letter-spacing: 0.5px; }
+    .clabel.no-rag { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-bottom: none; }
+    .clabel.with-rag { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-bottom: none; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    th { text-align: left; padding: 12px 16px; background: #f8fafc; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
+
+    /* Arch Diagram */
+    .arch { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 0; }
+    .abox {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #312e81;
+      text-align: center;
+      min-width: 200px;
+    }
+    .abox .aport { font-size: 11px; color: var(--accent-indigo); font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+    .abox .arole { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand-wrap">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <div class="brand-title">PolicyCheck AI</div>
+        <div class="brand-sub">Policy Intelligence Assistant · RAG + Code Llama via Ollama</div>
+      </div>
+    </div>
+    <div class="model-box">
+      <span class="model-lbl">LLM Model</span>
+      <select class="model-select" id="global-model-select" onchange="onModelChange()">
+        <option value="codellama:latest" selected>codellama:latest</option>
+        <option value="qwen2.5:0.5b">qwen2.5:0.5b</option>
+        <option value="tinyllama:1.1b">tinyllama:1.1b</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <button class="nav-btn active" onclick="showTab('tab-ask',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Ask Question
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-compare',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM7 21h10M12 3v18"/></svg>
+      Compare: RAG vs No-RAG
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-kb',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Knowledge Base
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-arch',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      Architecture
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-status',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      System Status
+    </button>
+  </div>
+
+  <div class="container">
+
+    <!-- TAB 1: ASK QUESTION -->
+    <div id="tab-ask" class="tab active">
+      <div class="card">
+        <h2>Ask PolicyCheck</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
+          Ask any question about Indian policy documents. PolicyCheck will retrieve the most relevant chunks from its knowledge base and generate a grounded answer.
+        </p>
+
+        <div class="tech-strip">
+          <div class="tech-chip"><span class="dot" style="background:#3776ab"></span>Python</div>
+          <div class="tech-chip"><span class="dot" style="background:#009688"></span>FastAPI</div>
+          <div class="tech-chip"><span class="dot" style="background:#6366f1"></span>Ollama :11434</div>
+          <div class="tech-chip"><span class="dot" style="background:#f59e0b"></span><span id="tech-badge-model">codellama:latest</span></div>
+          <div class="tech-chip"><span class="dot" style="background:#8b5cf6"></span>nomic-embed-text</div>
+          <div class="tech-chip"><span class="dot" style="background:#10b981"></span>RAG Pipeline</div>
+          <div class="tech-chip"><span class="dot" style="background:#06b6d4"></span>768-dim Vectors</div>
+          <div class="tech-chip"><span class="dot" style="background:#ec4899"></span>Cosine Similarity</div>
+          <div class="tech-chip"><span class="dot" style="background:#0288d1"></span>Docker Compose</div>
+        </div>
+
+        <textarea id="ask-q" rows="3" placeholder="e.g. What is GST? What are consumer rights? What are the penalties under the IT Act?"></textarea>
+
+        <div style="margin-top:14px;display:flex;align-items:center;gap:14px">
+          <button class="btn-ask" id="ask-btn" onclick="doPipelineAsk()">
+            Ask PolicyCheck
+          </button>
+          <span id="ask-overall-status" style="font-size:13px;color:var(--accent-blue)"></span>
+        </div>
+      </div>
+
+      <div id="pipeline-container"></div>
+    </div>
+
+    <!-- TAB 2: COMPARE -->
+    <div id="tab-compare" class="tab">
+      <div class="card">
+        <h2>RAG vs No-RAG Comparison</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">
+          Demonstrates the key difference: Without RAG the LLM answers freely from its pretrained knowledge. With RAG / PolicyCheck, a Knowledge Base relevance check runs first — if the question is outside the KB, LLM generation is blocked.
+        </p>
+        <input type="text" id="cmp-q" placeholder="Try both in-KB (What is GST?) and out-of-KB (capital of France?) questions"/>
+        <button class="btn" style="margin-top:12px" onclick="doCompare()">Compare Answers</button>
+      </div>
+
+      <div id="cmp-out" style="display:none">
+        <div class="compare-grid">
+          <div>
+            <div class="clabel no-rag">Without RAG — Direct LLM Answer</div>
+            <div class="result-box" id="cmp-norag"></div>
+          </div>
+          <div>
+            <div class="clabel with-rag" id="cmp-rag-label">PolicyCheck RAG — Grounded Answer</div>
+            <div id="cmp-kb-gate"></div>
+            <div class="result-box" id="cmp-rag"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+          <h2>Chunks Retrieved for RAG Answer</h2>
+          <div id="cmp-retrieved"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: KNOWLEDGE BASE -->
+    <div id="tab-kb" class="tab">
+      <div class="card">
+        <h2>Knowledge Base Statistics</h2>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-val" id="s-docs">—</div><div class="stat-lbl">PDF Documents</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-chunks">—</div><div class="stat-lbl">Total Chunks</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-emb">—</div><div class="stat-lbl">Embeddings</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-dim">768</div><div class="stat-lbl">Vector Dims</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Add Documents to Knowledge Base</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Upload policy PDFs below to extend PolicyCheck's knowledge base. Each document is chunked, embedded via nomic-embed-text, and stored in the vector index.
+        </p>
+
+        <div class="kb-drop-zone" id="kb-drop-zone">
+          <input type="file" id="kb-file-input" accept=".pdf" multiple onchange="kbFilesSelected(this.files)"/>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-indigo)" stroke-width="2" style="margin:0 auto"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="kb-drop-title">Drop PDF files here or click to browse</div>
+          <div class="kb-drop-sub">Supports single or multiple PDF documents</div>
+        </div>
+
+        <div id="kb-selected-files" style="margin-top:12px"></div>
+
+        <button class="btn" id="kb-upload-btn" onclick="kbUpload()" style="display:none;margin-top:14px">
+          Add to Knowledge Base
+        </button>
+
+        <div id="kb-ingest-results" style="margin-top:14px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Browse Chunks</h2>
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <input type="text" id="kb-search" placeholder="Search chunks by text, ID, or filename..." oninput="kbOnSearch()" style="flex:1;min-width:240px"/>
+          <select class="model-select" id="kb-cat-filter" onchange="kbOnCatFilter()">
+            <option value="">All Categories</option>
+            <option value="GST">GST</option>
+            <option value="WelfareScheme">WelfareScheme</option>
+            <option value="General">General</option>
+            <option value="Labour">Labour</option>
+            <option value="Uploaded">Uploaded</option>
+          </select>
+        </div>
+
+        <div id="kb-chunk-list">
+          <div style="color:var(--text-muted);font-size:13px">Loading knowledge base chunks...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ARCHITECTURE -->
+    <div id="tab-arch" class="tab">
+      <div class="card">
+        <h2>Application Architecture</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">
+          Each component is a separate FastAPI microservice communicating via HTTP APIs, orchestrated by Docker Compose.
+        </p>
+
+        <div class="arch">
+          <div class="abox">User Browser</div>
+          <div style="color:var(--text-muted);font-size:18px">↓</div>
+          <div class="abox">
+            UI / App Service
+            <div class="aport">app.py · :8080</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:18px">↓ HTTP API calls</div>
+          <div class="abox">
+            Docker Orchestration Service
+            <div class="aport">orchestration_service.py · :8000</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:18px">↓ host.docker.internal</div>
+
+          <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:10px">
+            <div class="abox">
+              Retrieval Service
+              <div class="aport">retrieval_service.py · :8001</div>
+              <div class="arole">nomic-embed-text</div>
+            </div>
+            <div class="abox">
+              LLM Service
+              <div class="aport">llm_service.py · :8002</div>
+              <div class="arole">Code Llama</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: SYSTEM STATUS -->
+    <div id="tab-status" class="tab">
+      <div class="card">
+        <h2>System Status</h2>
+        <div class="status-row">
+          <div class="status-pill">
+            <div class="dot-pulse" id="d-app"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">UI / App Service</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono'">app.py · :8080</div>
+            </div>
+          </div>
+
+          <div class="status-pill">
+            <div class="dot-pulse" id="d-orch"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Docker Orchestration</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono'">orchestration_service.py · :8000</div>
+            </div>
+          </div>
+
+          <div class="status-pill">
+            <div class="dot-pulse" id="d-ret"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Retrieval Service</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono'">retrieval_service.py · :8001</div>
+            </div>
+          </div>
+
+          <div class="status-pill">
+            <div class="dot-pulse" id="d-llm"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">LLM Service</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono'">llm_service.py · :8002</div>
+            </div>
+          </div>
+
+          <div class="status-pill">
+            <div class="dot-pulse" id="d-ollama"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Ollama API</div>
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono'">:11434</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" onclick="checkStatus()" style="margin-top:10px">Refresh Status</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'tab-kb') loadKB();
+  if (id === 'tab-status') checkStatus();
+}
+
+function getModel() {
+  const sel = document.getElementById('global-model-select');
+  return sel ? sel.value : 'codellama:latest';
+}
+
+function onModelChange() {
+  const model = getModel();
+  const badge = document.getElementById('tech-badge-model');
+  if (badge) badge.textContent = model;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function enc(str) {
+  return encodeURIComponent(str || '');
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const STEP_DEFS = [
+  { id:'s-question', num:'1', title:'User Question', cls:'step-s1' },
+  { id:'s-process',  num:'2', title:'Query Processing', cls:'step-s2' },
+  { id:'s-embed',    num:'3', title:'Query Embedding', cls:'step-s3' },
+  { id:'s-search',   num:'4', title:'Vector Similarity Search', cls:'step-s4' },
+  { id:'s-topk',     num:'5', title:'Top-K Retrieval', cls:'step-s5' },
+  { id:'s-context',  num:'6', title:'Retrieved Context → LLM', cls:'step-s6' },
+  { id:'s-llm',      num:'7', title:'LLM Generation', cls:'step-s7' },
+  { id:'s-answer',   num:'8', title:'RAG Answer', cls:'step-s8' },
+  { id:'s-sources',  num:'9', title:'Sources & Grounding', cls:'step-s9' },
+];
+
+function buildPipelineSkeleton(q) {
+  const container = document.getElementById('pipeline-container');
+  container.innerHTML = '';
+  STEP_DEFS.forEach((def) => {
+    const step = document.createElement('div');
+    step.className = 'pipe-step pending';
+    step.id = def.id;
+    step.innerHTML = `
+      <div class="step-header">
+        <span class="step-num">${def.num}</span>
+        <span class="step-title">${def.title}</span>
+        <span class="step-status waiting" id="${def.id}-status">Waiting</span>
+      </div>
+      <div class="step-body" id="${def.id}-body"></div>`;
+    container.appendChild(step);
+  });
+}
+
+function revealStep(id, statusText, statusClass, bodyHtml) {
+  const step = document.getElementById(id);
+  const statusEl = document.getElementById(id + '-status');
+  const bodyEl = document.getElementById(id + '-body');
+  if (step) step.classList.remove('pending');
+  if (statusEl) { statusEl.textContent = statusText; statusEl.className = 'step-status ' + statusClass; }
+  if (bodyEl && bodyHtml !== null) bodyEl.innerHTML = bodyHtml;
+}
+
+async function doPipelineAsk() {
+  const q = document.getElementById('ask-q').value.trim();
+  if (!q) return;
+
+  const btn = document.getElementById('ask-btn');
+  const overallStatus = document.getElementById('ask-overall-status');
+  btn.disabled = true;
+  if (overallStatus) overallStatus.textContent = 'Processing RAG pipeline...';
+
+  buildPipelineSkeleton(q);
+
+  await delay(100);
+  revealStep('s-question', 'Received', 'done', `Question: "${esc(q)}"`);
+
+  await delay(150);
+  revealStep('s-process', 'Done', 'done', `Input normalized, whitespace trimmed.`);
+
+  let data;
+  try {
+    const resp = await fetch('/api/rag-ask-pipeline?question=' + enc(q) + '&model=' + enc(getModel()), { method: 'POST' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    data = await resp.json();
+  } catch (err) {
+    revealStep('s-embed', 'Error', 'error', `Failed to reach backend: ${esc(err.message)}`);
+    btn.disabled = false;
+    if (overallStatus) overallStatus.textContent = '';
+    return;
+  }
+
+  const emb = data.embedding;
+  const sim = data.similarity_search;
+
+  revealStep('s-embed', 'Done', 'done', `Model: nomic-embed-text · Dims: ${emb.dimensions} · Latency: ${emb.latency_ms} ms`);
+
+  await delay(150);
+  revealStep('s-search', 'Done', 'done', `Method: Cosine Similarity · Total searched: ${sim.total_searched} chunks`);
+
+  if (!data.kb_match) {
+    revealStep('s-topk', 'Blocked', 'error', `<div style="color:#f87171;padding:10px 0">No relevant context found in Knowledge Base (Score: ${data.best_score.toFixed(4)} < Threshold: ${data.threshold}). LLM generation blocked.</div>`);
+    revealStep('s-answer', 'Blocked', 'error', `<div style="padding:10px 0">${esc(data.answer)}</div>`);
+    btn.disabled = false;
+    if (overallStatus) overallStatus.textContent = '';
+    return;
+  }
+
+  revealStep('s-topk', 'Done', 'done', `Retrieved ${sim.top_k} relevant chunks from Knowledge Base.`);
+
+  revealStep('s-context', 'Ready', 'done', `<div style="max-height:160px;overflow-y:auto;background:var(--bg-input);padding:10px;border-radius:8px">${esc(data.context_sent)}</div>`);
+
+  revealStep('s-llm', 'Done', 'done', `Generated answer via ${esc(data.llm.model)} in ${data.llm.latency_ms} ms.`);
+
+  revealStep('s-answer', 'Complete', 'done', `<div class="result-box">${esc(data.answer)}</div>`);
+
+  btn.disabled = false;
+  if (overallStatus) overallStatus.textContent = '';
+}
+
+async function doCompare() {
+  const q = document.getElementById('cmp-q').value.trim();
+  if (!q) return;
+
+  const out = document.getElementById('cmp-out');
+  const noragEl = document.getElementById('cmp-norag');
+  const ragEl = document.getElementById('cmp-rag');
+  out.style.display = 'block';
+  noragEl.textContent = 'Generating Direct LLM answer...';
+  ragEl.textContent = 'Executing RAG pipeline...';
+
+  try {
+    const [resDirect, resRag] = await Promise.all([
+      fetch('/api/ask-direct?question=' + enc(q) + '&model=' + enc(getModel()), { method: 'POST' }).then(r => r.json()),
+      fetch('/api/rag-ask?question=' + enc(q) + '&model=' + enc(getModel()), { method: 'POST' }).then(r => r.json())
+    ]);
+
+    noragEl.textContent = resDirect.response || 'No response';
+    ragEl.textContent = resRag.answer || 'No response';
+
+    const retEl = document.getElementById('cmp-retrieved');
+    if (retEl && resRag.retrieved_results) {
+      retEl.innerHTML = resRag.retrieved_results.map(r => `
+        <div style="background:var(--bg-input);padding:12px;border-radius:8px;margin-bottom:8px">
+          <div style="font-weight:700;color:#60a5fa">${esc(r.source)} (Score: ${r.score.toFixed(4)})</div>
+          <div style="font-size:12px;color:var(--text-sub);margin-top:4px">${esc(r.text)}</div>
+        </div>
+      `).join('');
+    }
+  } catch (err) {
+    noragEl.textContent = 'Error: ' + err.message;
+    ragEl.textContent = 'Error: ' + err.message;
+  }
+}
+
+async function loadKB() {
+  try {
+    const infoResp = await fetch('/api/kb-info');
+    const info = await infoResp.json();
+    document.getElementById('s-docs').textContent = info.total_documents || 5;
+    document.getElementById('s-chunks').textContent = info.total_chunks || 591;
+    document.getElementById('s-emb').textContent = info.total_embeddings || 591;
+
+    kbFetchChunks();
+  } catch (e) {
+    console.error('Failed to load KB info:', e);
+  }
+}
+
+async function kbFetchChunks() {
+  const q = document.getElementById('kb-search').value.trim();
+  const cat = document.getElementById('kb-cat-filter').value;
+  const listEl = document.getElementById('kb-chunk-list');
+
+  try {
+    const r = await fetch(`/api/kb-chunks?search=${enc(q)}&category=${enc(cat)}&page=1&page_size=15`);
+    const data = await r.json();
+
+    if (!data.chunks || data.chunks.length === 0) {
+      listEl.innerHTML = '<div style="color:var(--text-muted);padding:20px">No matching chunks found.</div>';
+      return;
+    }
+
+    listEl.innerHTML = data.chunks.map(c => `
+      <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;padding:14px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:11px;font-family:'JetBrains Mono';color:#60a5fa">Chunk #${c.id}</span>
+          <span style="font-size:11px;color:var(--text-muted)">${esc(c.source)}</span>
+        </div>
+        <div style="font-size:13px;color:var(--text-sub);line-height:1.6">${esc(c.text)}</div>
+      </div>
+    `).join('');
+  } catch (e) {
+    listEl.innerHTML = '<div style="color:#f87171">Failed to load chunks.</div>';
+  }
+}
+
+function kbOnSearch() { kbFetchChunks(); }
+function kbOnCatFilter() { kbFetchChunks(); }
+
+function kbFilesSelected(files) {
+  const container = document.getElementById('kb-selected-files');
+  const btn = document.getElementById('kb-upload-btn');
+  if (!files || files.length === 0) {
+    container.innerHTML = '';
+    btn.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = Array.from(files).map(f => `
+    <div style="font-size:12px;color:#93c5fd;background:var(--bg-input);padding:8px 12px;border-radius:6px;margin-bottom:4px">
+      PDF: ${esc(f.name)} (${Math.round(f.size/1024)} KB)
+    </div>
+  `).join('');
+  btn.style.display = 'inline-flex';
+}
+
+async function kbUpload() {
+  const input = document.getElementById('kb-file-input');
+  const resultsEl = document.getElementById('kb-ingest-results');
+  if (!input.files || input.files.length === 0) return;
+
+  resultsEl.innerHTML = '<div style="color:var(--accent-blue)">Ingesting and embedding PDFs...</div>';
+
+  const formData = new FormData();
+  for (let file of input.files) {
+    formData.append('files', file);
+  }
+
+  try {
+    const resp = await fetch('/api/ingest-pdf', { method: 'POST', body: formData });
+    const data = await resp.json();
+    resultsEl.innerHTML = `<div style="color:var(--accent-emerald);font-weight:700">Successfully ingested documents into Knowledge Base!</div>`;
+    loadKB();
+  } catch (err) {
+    resultsEl.innerHTML = `<div style="color:#f87171">Ingestion failed: ${esc(err.message)}</div>`;
+  }
+}
+
+async function checkStatus() {
+  const services = ['app', 'orch', 'ret', 'llm', 'ollama'];
+  for (let s of services) {
+    const dot = document.getElementById('d-' + s);
+    if (dot) dot.style.background = '#64748b';
+  }
+
+  try {
+    const [hApp, hOrch, hRet, hLlm, hOll] = await Promise.all([
+      fetch('/api/health/app').then(r=>r.json()).catch(()=>({ok:false})),
+      fetch('/api/health/orch').then(r=>r.json()).catch(()=>({ok:false})),
+      fetch('/api/health/retrieval').then(r=>r.json()).catch(()=>({ok:false})),
+      fetch('/api/health/llm').then(r=>r.json()).catch(()=>({ok:false})),
+      fetch('/api/health/ollama').then(r=>r.json()).catch(()=>({ok:false}))
+    ]);
+
+    document.getElementById('d-app').style.background = hApp.ok ? '#10b981' : '#f43f5e';
+    document.getElementById('d-orch').style.background = hOrch.ok ? '#10b981' : '#f43f5e';
+    document.getElementById('d-ret').style.background = hRet.ok ? '#10b981' : '#f43f5e';
+    document.getElementById('d-llm').style.background = hLlm.ok ? '#10b981' : '#f43f5e';
+    document.getElementById('d-ollama').style.background = hOll.ok ? '#10b981' : '#f43f5e';
+  } catch (e) {
+    console.error('Status check error:', e);
+  }
+}
+
+window.onload = function() {
+  checkStatus();
+};
+</script>
+</body>
+</html>

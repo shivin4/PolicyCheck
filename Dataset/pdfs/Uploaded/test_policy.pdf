@@ -1,0 +1,88 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 1
+/Kids [ 4 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Resources <<
+/Font <<
+/F1 <<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+>>
+>>
+/MediaBox [ 0.0 0.0 612 792 ]
+/Parent 2 0 R
+/Contents 5 0 R
+>>
+endobj
+5 0 obj
+<<
+/Length 851
+>>
+stream
+BT
+/F1 12 Tf
+50 780 Td
+(THE DIGITAL DATA PROTECTION POLICY - TEST DOCUMENT) Tj
+0 -30 Td
+(Section 1: Purpose) Tj
+0 -20 Td
+(This policy governs the collection storage and processing of digital data.) Tj
+0 -20 Td
+(All organisations must appoint a Data Protection Officer DPO.) Tj
+0 -30 Td
+(Section 2: Data Subject Rights) Tj
+0 -20 Td
+(Every data subject has the right to access their personal data.) Tj
+0 -20 Td
+(Data subjects may request erasure of their data within 30 days.) Tj
+0 -20 Td
+(Data portability rights allow transfer of data between processors.) Tj
+0 -30 Td
+(Section 3: Penalties) Tj
+0 -20 Td
+(Violation of data protection rules attracts a fine of up to 250 crore rupees.) Tj
+0 -20 Td
+(Repeated violations may result in imprisonment of up to 3 years.) Tj
+0 -20 Td
+(Organisations must report data breaches within 72 hours of discovery.) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000113 00000 n 
+0000000162 00000 n 
+0000000343 00000 n 
+trailer
+<<
+/Size 6
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+1245
+%%EOF
