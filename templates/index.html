@@ -336,9 +336,11 @@
     <div class="model-box">
       <span class="model-lbl">LLM Model</span>
       <select class="model-select" id="global-model-select" onchange="onModelChange()">
-        <option value="qwen2.5:0.5b" selected>qwen2.5:0.5b (Fast CPU)</option>
-        <option value="codellama:latest">codellama:latest</option>
-        <option value="tinyllama:1.1b">tinyllama:1.1b</option>
+        <option value="llama3.1:8b" selected>Llama 3.1 8B (RTX GPU Recommended)</option>
+        <option value="qwen2.5:14b">Qwen 2.5 14B (Premier RAG)</option>
+        <option value="qwen2.5:7b">Qwen 2.5 7B</option>
+        <option value="codellama:latest">Code Llama 7B</option>
+        <option value="qwen2.5:0.5b">qwen2.5:0.5b (CPU Light)</option>
       </select>
     </div>
   </header>
