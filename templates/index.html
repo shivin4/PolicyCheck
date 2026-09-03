@@ -6,6 +6,7 @@
   <title>PolicyCheck AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -282,14 +283,20 @@
       background: #f8fafc;
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 18px;
+      padding: 20px;
       font-size: 13.5px;
       line-height: 1.7;
       color: var(--text-main);
-      max-height: 420px;
+      max-height: 480px;
       overflow-y: auto;
       margin-top: 10px;
     }
+    .result-box p { margin-bottom: 12px; }
+    .result-box p:last-child { margin-bottom: 0; }
+    .result-box ul, .result-box ol { margin: 8px 0 14px 24px; }
+    .result-box li { margin-bottom: 6px; }
+    .result-box strong { font-weight: 700; color: #0f172a; }
+    .result-box code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
 
     /* Compare Grid */
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -600,6 +607,26 @@ function onModelChange() {
   if (badge) badge.textContent = model;
 }
 
+function renderMarkdown(str) {
+  if (!str) return '';
+  try {
+    if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+      return marked.parse(str);
+    }
+  } catch (e) {}
+
+  let text = esc(str);
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+  text = text.replace(/^[\s]*[\*\-]\s+(.*)$/gm, '<li>$1</li>');
+  text = text.replace(/((?:<li>.*<\/li>[\s]*)+)/g, '<ul>$1</ul>');
+  text = text.replace(/^[\s]*(\d+)\.\s+(.*)$/gm, '<li>$2</li>');
+  text = text.replace(/\n\n/g, '</p><p>');
+  text = text.replace(/\n/g, '<br>');
+  return '<p>' + text + '</p>';
+}
+
 function esc(str) {
   if (!str) return '';
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -703,7 +730,7 @@ async function doPipelineAsk() {
 
   revealStep('s-llm', 'Done', 'done', `Generated answer via ${esc(data.llm.model)} in ${data.llm.latency_ms} ms.`);
 
-  revealStep('s-answer', 'Complete', 'done', `<div class="result-box">${esc(data.answer)}</div>`);
+  revealStep('s-answer', 'Complete', 'done', `<div class="result-box">${renderMarkdown(data.answer)}</div>`);
 
   const sourcesHtml = sim.results ? sim.results.map(r => `
     <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-input);padding:8px 12px;border-radius:8px;margin-bottom:6px;font-size:12px">
@@ -726,8 +753,8 @@ async function doCompare() {
   const noragEl = document.getElementById('cmp-norag');
   const ragEl = document.getElementById('cmp-rag');
   out.style.display = 'block';
-  noragEl.textContent = 'Generating Direct LLM answer...';
-  ragEl.textContent = 'Executing RAG pipeline...';
+  noragEl.innerHTML = 'Generating Direct LLM answer...';
+  ragEl.innerHTML = 'Executing RAG pipeline...';
 
   try {
     const [resDirect, resRag] = await Promise.all([
@@ -735,8 +762,8 @@ async function doCompare() {
       fetch('/api/rag-ask?question=' + enc(q) + '&model=' + enc(getModel()), { method: 'POST' }).then(r => r.json())
     ]);
 
-    noragEl.textContent = resDirect.response || 'No response';
-    ragEl.textContent = resRag.answer || 'No response';
+    noragEl.innerHTML = renderMarkdown(resDirect.response || 'No response');
+    ragEl.innerHTML = renderMarkdown(resRag.answer || 'No response');
 
     const retEl = document.getElementById('cmp-retrieved');
     if (retEl && resRag.retrieved_results) {
