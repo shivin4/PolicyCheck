@@ -17,10 +17,16 @@ from pypdf import PdfReader
 app = FastAPI(title="PolicyCheck AI")
 
 # ── Config ────────────────────────────────────────────────────────────────────
-OLLAMA_URL   = "http://localhost:11434/api/generate"
-EMBED_URL    = "http://localhost:11434/api/embeddings"
+OLLAMA_BASE  = os.getenv("OLLAMA_URL", "http://localhost:11434").rstrip("/")
+if OLLAMA_BASE.endswith("/api/generate"):
+    OLLAMA_BASE = OLLAMA_BASE[:-13]
+
+OLLAMA_URL   = f"{OLLAMA_BASE}/api/generate"
+EMBED_URL    = f"{OLLAMA_BASE}/api/embeddings"
+TAGS_URL     = f"{OLLAMA_BASE}/api/tags"
 LLM_MODEL    = os.getenv("LLM_MODEL", "qwen2.5:0.5b")
 EMBED_MODEL  = "nomic-embed-text"
+
 
 # ── Relevance threshold for KB matching ───────────────────────────────────────
 # Scores below this indicate the question is outside the knowledge base.
@@ -1098,7 +1104,7 @@ def health_orch():
 @app.get("/api/health/ollama")
 def health_ollama():
     try:
-        r = requests.get("http://localhost:11434/api/tags", timeout=3)
+        r = requests.get(TAGS_URL, timeout=3)
         data = r.json()
         models = [m["name"] for m in data.get("models", [])]
         return {"ok": True, "service": "ollama", "port": 11434, "models": models}
