@@ -281,9 +281,21 @@ Answer:"""
         OLLAMA_URL,
         json={"model": llm, "prompt": prompt, "stream": False}
     )
+    if llm_resp.status_code == 404:
+        # Fallback to available installed models if requested model (e.g. llama3.1) is not pulled
+        for fallback in ["qwen2.5:0.5b", "codellama:latest", "tinyllama:1.1b"]:
+            fb_resp = requests.post(
+                OLLAMA_URL,
+                json={"model": fallback, "prompt": prompt, "stream": False}
+            )
+            if fb_resp.status_code == 200:
+                llm_resp = fb_resp
+                llm = fallback
+                break
     llm_resp.raise_for_status()
     llm_ms = round((time.time() - t2) * 1000)
     answer = llm_resp.json()["response"]
+
 
     # Build a short embedding preview (first 8 values, rounded)
     emb_preview = [round(v, 4) for v in query_emb[:8]]
