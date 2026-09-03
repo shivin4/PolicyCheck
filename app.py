@@ -83,12 +83,24 @@ def api_ask_direct(question: str, model: str = ""):
 
 # ── Exercise 3: RAG pipeline (embedded in app) ────────────────────────────────
 def get_embedding(text: str):
-    r = requests.post(
-        EMBED_URL,
-        json={"model": EMBED_MODEL, "prompt": text}
-    )
-    r.raise_for_status()
-    return r.json()["embedding"]
+    try:
+        r = requests.post(
+            EMBED_URL,
+            json={"model": EMBED_MODEL, "prompt": text},
+            timeout=10
+        )
+        r.raise_for_status()
+        return r.json()["embedding"]
+    except Exception:
+        # Fallback for newer Ollama embedding format
+        r = requests.post(
+            EMBED_URL,
+            json={"model": "nomic-embed-text:latest", "input": text},
+            timeout=10
+        )
+        r.raise_for_status()
+        data = r.json()
+        return data.get("embedding") or data.get("embeddings", [[]])[0]
 
 
 def cosine_similarity(a, b):
