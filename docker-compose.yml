@@ -4,6 +4,7 @@ services:
     build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-retrieval
+    restart: unless-stopped
     ports:
       - "8001:8001"
     extra_hosts:
@@ -16,6 +17,7 @@ services:
     build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-llm
+    restart: unless-stopped
     ports:
       - "8002:8002"
     extra_hosts:
@@ -29,8 +31,9 @@ services:
     build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-orchestration
+    restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8003:8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
@@ -45,12 +48,14 @@ services:
     build: .
     image: policycheck-ai-policycheck:latest
     container_name: policycheck-ui
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8000:8080"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
       - LLM_MODEL=${LLM_MODEL:-codellama:latest}
     command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+
 
