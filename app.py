@@ -168,11 +168,27 @@ Question:
 
 Answer:"""
 
-    llm_resp = requests.post(
-        OLLAMA_URL,
-        json={"model": llm, "prompt": prompt, "stream": False}
-    )
-    llm_resp.raise_for_status()
+    answer = ""
+    try:
+        llm_resp = requests.post(
+            OLLAMA_URL,
+            json={"model": llm, "prompt": prompt, "stream": False},
+            timeout=120
+        )
+        if llm_resp.status_code != 200:
+            for fallback in ["qwen2.5:0.5b", "smollm:360m"]:
+                fb_resp = requests.post(
+                    OLLAMA_URL,
+                    json={"model": fallback, "prompt": prompt, "stream": False},
+                    timeout=120
+                )
+                if fb_resp.status_code == 200:
+                    llm_resp = fb_resp
+                    break
+        llm_resp.raise_for_status()
+        answer = llm_resp.json().get("response", "")
+    except Exception as e:
+        answer = f"Error running model '{llm}': {str(e)}. Selected model may exceed available RAM on this EC2 instance."
 
     return {
         "question": question,
@@ -180,7 +196,7 @@ Answer:"""
         "kb_match": True,
         "best_score": round(best_score, 4),
         "threshold": RELEVANCE_THRESHOLD,
-        "answer": llm_resp.json()["response"],
+        "answer": answer,
     }
 
 
@@ -277,24 +293,33 @@ Answer:"""
 
     # Step 4 – LLM generation
     t2 = time.time()
-    llm_resp = requests.post(
-        OLLAMA_URL,
-        json={"model": llm, "prompt": prompt, "stream": False}
-    )
-    if llm_resp.status_code == 404:
-        # Fallback to available installed models if requested model (e.g. llama3.1) is not pulled
-        for fallback in ["qwen2.5:0.5b", "codellama:latest", "tinyllama:1.1b"]:
-            fb_resp = requests.post(
-                OLLAMA_URL,
-                json={"model": fallback, "prompt": prompt, "stream": False}
-            )
-            if fb_resp.status_code == 200:
-                llm_resp = fb_resp
-                llm = fallback
-                break
-    llm_resp.raise_for_status()
+    answer = ""
+    try:
+        llm_resp = requests.post(
+            OLLAMA_URL,
+            json={"model": llm, "prompt": prompt, "stream": False},
+            timeout=120
+        )
+        if llm_resp.status_code != 200:
+            # Fallback to ultra-light models if requested model fails (e.g. OOM on 2GB EC2)
+            for fallback in ["qwen2.5:0.5b", "smollm:360m"]:
+                if fallback == llm:
+                    continue
+                fb_resp = requests.post(
+                    OLLAMA_URL,
+                    json={"model": fallback, "prompt": prompt, "stream": False},
+                    timeout=120
+                )
+                if fb_resp.status_code == 200:
+                    llm_resp = fb_resp
+                    llm = f"{fallback} (fallback from {model})"
+                    break
+        llm_resp.raise_for_status()
+        answer = llm_resp.json().get("response", "")
+    except Exception as e:
+        answer = f"Error running model '{llm}': {str(e)}. The selected model may exceed the available RAM on this EC2 instance (t3.small has 2GB RAM). Please use qwen2.5:0.5b or smollm:360m."
+
     llm_ms = round((time.time() - t2) * 1000)
-    answer = llm_resp.json()["response"]
 
 
     # Build a short embedding preview (first 8 values, rounded)
