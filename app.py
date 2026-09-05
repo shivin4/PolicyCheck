@@ -34,8 +34,8 @@ EMBED_MODEL  = "nomic-embed-text"
 # out-of-KB questions score 0.38–0.50.
 RELEVANCE_THRESHOLD = float(os.getenv("RELEVANCE_THRESHOLD", "0.50"))
 
-RETRIEVAL_SERVICE = "http://localhost:8001"
-LLM_SERVICE       = "http://localhost:8002"
+RETRIEVAL_SERVICE = os.getenv("RETRIEVAL_SERVICE_URL", "http://localhost:8001")
+LLM_SERVICE       = os.getenv("LLM_SERVICE_URL", "http://localhost:8002")
 
 # ── Load embeddings once at startup ──────────────────────────────────────────
 with open("embeddings.json", "r", encoding="utf-8") as f:
@@ -1104,9 +1104,9 @@ def health_llm():
 
 @app.get("/api/health/orch")
 def health_orch():
-    # Docker orchestration runs on port 8000
+    orch_url = os.getenv("ORCHESTRATION_SERVICE_URL", "http://localhost:8000")
     try:
-        r = requests.get("http://localhost:8000/", timeout=3)
+        r = requests.get(f"{orch_url}/", timeout=3)
         ok = r.status_code == 200 and "Orchestration" in r.text
         return {"ok": ok, "service": "Docker Orchestration", "port": 8000}
     except Exception:

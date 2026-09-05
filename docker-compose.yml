@@ -56,6 +56,13 @@ services:
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
       - LLM_MODEL=${LLM_MODEL:-codellama:latest}
+      - RETRIEVAL_SERVICE_URL=http://retrieval:8001
+      - LLM_SERVICE_URL=http://llm:8002
+      - ORCHESTRATION_SERVICE_URL=http://orchestration:8000
+    depends_on:
+      - retrieval
+      - llm
+      - orchestration
     command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
 
 
