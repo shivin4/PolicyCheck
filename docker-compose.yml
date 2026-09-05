@@ -24,7 +24,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
-      - LLM_MODEL=${LLM_MODEL:-codellama:latest}
+      - LLM_MODEL=${LLM_MODEL:-qwen2.5:0.5b}
     command: ["uvicorn", "llm_service:app", "--host", "0.0.0.0", "--port", "8002"]
 
   orchestration:
@@ -38,7 +38,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
-      - LLM_MODEL=${LLM_MODEL:-codellama:latest}
+      - LLM_MODEL=${LLM_MODEL:-qwen2.5:0.5b}
     depends_on:
       - retrieval
       - llm
@@ -55,7 +55,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - OLLAMA_URL=http://host.docker.internal:11434
-      - LLM_MODEL=${LLM_MODEL:-codellama:latest}
+      - LLM_MODEL=${LLM_MODEL:-qwen2.5:0.5b}
       - RETRIEVAL_SERVICE_URL=http://retrieval:8001
       - LLM_SERVICE_URL=http://llm:8002
       - ORCHESTRATION_SERVICE_URL=http://orchestration:8000
