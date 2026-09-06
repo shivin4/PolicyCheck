@@ -33,7 +33,7 @@ services:
     container_name: policycheck-orchestration
     restart: unless-stopped
     ports:
-      - "8003:8000"
+      - "8000:8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
@@ -50,7 +50,7 @@ services:
     container_name: policycheck-ui
     restart: unless-stopped
     ports:
-      - "8000:8080"
+      - "8080:8080"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
