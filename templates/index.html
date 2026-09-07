@@ -378,6 +378,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       System Status
     </button>
+    <button class="nav-btn" onclick="showTab('tab-week4',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Model Evaluation
+    </button>
   </div>
 
   <div class="container">
@@ -538,7 +542,87 @@
       </div>
     </div>
 
-    <!-- TAB 5: SYSTEM STATUS -->
+    <!-- TAB 5: MODEL EVALUATION -->
+    <div id="tab-week4" class="tab">
+      <div class="card">
+        <h2>LLM Model Evaluation Results</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
+          Comprehensive quantitative evaluation of 3 LLM models across 25 benchmark questions. Covers Exercise 1-6: Model comparison, evaluation dataset, quality & performance metrics, trade-off analysis, RAG pipeline analysis, and codebase understanding.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Model Summary Metrics</h2>
+        <div id="week4-summary-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+          <div style="color:var(--text-muted)">Loading evaluation results...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Detailed Results by Question</h2>
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <select id="w4-model-filter" class="model-select" onchange="loadWeek4Results()">
+            <option value="">All Models</option>
+            <option value="codellama:latest">CodeLlama</option>
+            <option value="qwen2.5:0.5b">Qwen 2.5 (0.5B)</option>
+            <option value="tinyllama:1.1b">TinyLLaMA (1.1B)</option>
+          </select>
+          <select id="w4-category-filter" class="model-select" onchange="loadWeek4Results()">
+            <option value="">All Categories</option>
+            <option value="GST">GST</option>
+            <option value="Information Technology">IT Act</option>
+            <option value="Consumer Protection">Consumer Protection</option>
+            <option value="Essential Commodities">Essential Commodities</option>
+            <option value="Out-of-scope">Out-of-scope</option>
+          </select>
+        </div>
+        <div id="week4-results-table" style="overflow-x:auto">
+          <div style="color:var(--text-muted)">Loading results...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Exercise Summary</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-indigo)">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 1: Model Evaluation</div>
+            <div style="font-size:13px;color:var(--text-sub)">Evaluated 3 models (CodeLlama, Qwen 2.5, TinyLLaMA) with identical prompts & questions</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-blue)">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 2: Evaluation Dataset</div>
+            <div style="font-size:13px;color:var(--text-sub)">25 representative questions across 4 policy categories + hallucination traps</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-emerald)">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 3: Quantitative Metrics</div>
+            <div style="font-size:13px;color:var(--text-sub)">Correctness, relevance, latency, hallucination rate, retrieval quality</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-rose)">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 4: Trade-off Analysis</div>
+            <div style="font-size:13px;color:var(--text-sub)">Accuracy vs speed, hallucination vs model size, optimal model selection</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid #f59e0b">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 5: RAG Pipeline Analysis</div>
+            <div style="font-size:13px;color:var(--text-sub)">Question → retrieval → LLM response tracing, accuracy patterns</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid #06b6d4">
+            <div style="font-weight:700;margin-bottom:6px">Exercise 6: Codebase Understanding</div>
+            <div style="font-size:13px;color:var(--text-sub)">Multi-file repository Q&A, AST limitations, Sourcegraph motivation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Key Findings</h2>
+        <div id="week4-findings" style="font-size:13px;line-height:1.8;color:var(--text-sub)">
+          <p><strong>Accuracy vs Speed Trade-off:</strong> TinyLLaMA achieved highest accuracy (1.36/2.00) with lowest hallucination rate (20%), while Qwen 2.5 achieved fastest response time (7.7s) with strong relevance (0.75).</p>
+          <p style="margin-top:12px"><strong>Model Selection:</strong> For cloud deployment, Qwen 2.5 (0.5B) provides optimal Pareto efficiency between responsiveness and accuracy. CodeLlama (7B) suffered excessive latency (41.4s avg) despite lower relevance.</p>
+          <p style="margin-top:12px"><strong>RAG Pipeline Quality:</strong> 100% retrieval hit rate across all models for KB-supported questions. Out-of-scope questions revealed hallucination patterns—TinyLLaMA showed best refusal accuracy.</p>
+          <p style="margin-top:12px"><strong>Codebase RAG Limitations:</strong> Standard text-chunk RAG (vector search) succeeds at keyword matching but fails at deep repository Q&A requiring AST awareness, call-graph tracking, and symbol definition lookup.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: SYSTEM STATUS -->
     <div id="tab-status" class="tab">
       <div class="card">
         <h2>System Status</h2>
@@ -897,6 +981,110 @@ async function checkStatus() {
 window.onload = function() {
   checkStatus();
 };
+
+// Week 4 Evaluation Functions
+async function loadWeek4Results() {
+  try {
+    const response = await fetch('/api/week4-results');
+    const data = await response.json();
+
+    if (!data.success) {
+      document.getElementById('week4-summary-grid').innerHTML = '<div style="color:#f87171">Failed to load evaluation results.</div>';
+      return;
+    }
+
+    // Populate summary metrics
+    renderWeek4Summary(data.summary);
+    
+    // Populate detailed results table
+    renderWeek4ResultsTable(data.results, data.questions);
+  } catch (err) {
+    console.error('Error loading Week 4 results:', err);
+    document.getElementById('week4-summary-grid').innerHTML = '<div style="color:#f87171">Error: ' + err.message + '</div>';
+  }
+}
+
+function renderWeek4Summary(summary) {
+  const grid = document.getElementById('week4-summary-grid');
+  const models = Object.keys(summary);
+  
+  grid.innerHTML = models.map(model => {
+    const stats = summary[model];
+    return `
+      <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:12px;padding:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent-indigo)">${esc(model)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+          <div><span style="color:var(--text-muted)">Correctness:</span><br><strong>${stats.avg_correctness.toFixed(2)}/2.00</strong></div>
+          <div><span style="color:var(--text-muted)">Relevance:</span><br><strong>${stats.avg_relevance.toFixed(2)}</strong></div>
+          <div><span style="color:var(--text-muted)">Latency:</span><br><strong>${stats.avg_latency.toFixed(0)}ms</strong></div>
+          <div><span style="color:var(--text-muted)">Hallucinations:</span><br><strong>${stats.hallucination_count}</strong></div>
+          <div><span style="color:var(--text-muted)">Retrieval:</span><br><strong>${(stats.retrieval_hit_rate * 100).toFixed(1)}%</strong></div>
+          <div><span style="color:var(--text-muted)">LLM Time:</span><br><strong>${stats.avg_llm_latency.toFixed(0)}ms</strong></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderWeek4ResultsTable(results, questions) {
+  const modelFilter = document.getElementById('w4-model-filter').value;
+  const catFilter = document.getElementById('w4-category-filter').value;
+
+  // Filter results
+  let filtered = results;
+  if (modelFilter) {
+    filtered = filtered.filter(r => r.model === modelFilter);
+  }
+  if (catFilter) {
+    filtered = filtered.filter(r => r.category === catFilter);
+  }
+
+  const table = document.createElement('table');
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Q ID</th>
+        <th>Question</th>
+        <th>Model</th>
+        <th>Correctness</th>
+        <th>Relevance</th>
+        <th>Latency</th>
+        <th>Hallucination</th>
+        <th>Retrieval</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${filtered.map(r => {
+        const q = questions.find(q => q.id === r.question_id);
+        return `
+          <tr style="font-size:12px">
+            <td><strong>${esc(r.question_id)}</strong></td>
+            <td>${esc((q?.question || 'N/A').substring(0, 40))}...</td>
+            <td><span style="background:var(--bg-input);padding:2px 8px;border-radius:4px">${esc(r.model.split(':')[0])}</span></td>
+            <td><strong>${r.correctness_score.toFixed(2)}</strong>/2</td>
+            <td>${r.relevance_score.toFixed(2)}</td>
+            <td>${r.latency_ms}ms</td>
+            <td>${r.hallucination ? '❌' : '✓'}</td>
+            <td>${r.retrieval_quality?.retrieval_quality_score === 1 ? '✓' : '✗'}</td>
+          </tr>
+        `;
+      }).join('')}
+    </tbody>
+  `;
+  
+  document.getElementById('week4-results-table').innerHTML = '';
+  document.getElementById('week4-results-table').appendChild(table);
+}
+
+// Load Week 4 results when tab is shown
+const originalShowTab = window.showTab || function() {};
+window.showTab = function(id, btn) {
+  originalShowTab(id, btn);
+  if (id === 'tab-week4') {
+    loadWeek4Results();
+  }
+};
+
 </script>
 </body>
 </html>
