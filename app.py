@@ -1102,6 +1102,80 @@ QUESTION:
     }
 
 
+# ── Week 4 Evaluation Results ──────────────────────────────────────────────────
+@app.get("/api/week4-results")
+def week4_results():
+    """
+    Return Week 4 evaluation results from evaluation_results.json
+    Includes summary metrics per model and detailed per-question results
+    """
+    import json
+    from pathlib import Path
+    
+    eval_results_path = Path("evaluation_results.json")
+    eval_dataset_path = Path("evaluation_dataset.json")
+    
+    if not eval_results_path.exists() or not eval_dataset_path.exists():
+        return {
+            "success": False,
+            "error": "Evaluation files not found. Run run_evaluation.py first."
+        }
+    
+    try:
+        with open(eval_results_path, "r", encoding="utf-8") as f:
+            eval_data = json.load(f)
+        
+        with open(eval_dataset_path, "r", encoding="utf-8") as f:
+            dataset = json.load(f)
+        
+        questions = dataset.get("questions", [])
+        results = eval_data.get("results", [])
+        
+        # Calculate summary metrics per model
+        summary = {}
+        models = set(r["model"] for r in results)
+        
+        for model in models:
+            model_results = [r for r in results if r["model"] == model]
+            
+            avg_correctness = sum(r.get("correctness_score") or 0 for r in model_results) / len(model_results) if model_results else 0
+            avg_relevance = sum(r.get("relevance_score") or 0 for r in model_results) / len(model_results) if model_results else 0
+            avg_latency = sum(r.get("latency_ms") or 0 for r in model_results) / len(model_results) if model_results else 0
+            avg_llm_latency = sum(r.get("llm_latency_ms") or 0 for r in model_results) / len(model_results) if model_results else 0
+            hallucination_count = sum(1 for r in model_results if r.get("hallucination"))
+            
+            retrieval_scores = [
+                r["retrieval_quality"]["retrieval_quality_score"]
+                for r in model_results
+                if isinstance(r.get("retrieval_quality"), dict) and r["retrieval_quality"].get("retrieval_quality_score") is not None
+            ]
+            retrieval_hit_rate = (sum(retrieval_scores) / len(retrieval_scores)) if retrieval_scores else 0
+            
+            summary[model] = {
+                "avg_correctness": avg_correctness,
+                "avg_relevance": avg_relevance,
+                "avg_latency": avg_latency,
+                "avg_llm_latency": avg_llm_latency,
+                "hallucination_count": hallucination_count,
+                "retrieval_hit_rate": retrieval_hit_rate,
+                "total_evaluated": len(model_results),
+            }
+        
+        return {
+            "success": True,
+            "summary": summary,
+            "results": results,
+            "questions": questions,
+            "metadata": eval_data.get("metadata", {})
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Failed to load evaluation results: {str(e)}"
+        }
+
+
 # ── Health checks ─────────────────────────────────────────────────────────────
 @app.get("/api/health/app")
 def health_app():
