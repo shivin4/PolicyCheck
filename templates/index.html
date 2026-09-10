@@ -344,35 +344,29 @@
       <span class="model-lbl">LLM Model</span>
       <select class="model-select" id="global-model-select" onchange="onModelChange()">
         <option value="qwen2.5:0.5b" selected>qwen2.5:0.5b</option>
-        <option value="qwen2.5:1.5b">qwen2.5:1.5b</option>
-        <option value="llama3.2:1b">llama3.2:1b</option>
-        <option value="smollm:360m">smollm:360m</option>
-        <option value="tinyllama:latest">tinyllama</option>
-        <option value="qwen2.5:7b">qwen2.5:7b</option>
-        <option value="llama3.1:8b">llama3.1:8b</option>
+        <option value="tinyllama:1.1b">tinyllama:1.1b</option>
         <option value="codellama:latest">codellama:latest</option>
-        <option value="qwen2.5:14b">qwen2.5:14b</option>
       </select>
     </div>
   </header>
 
   <!-- Navigation Bar -->
   <div class="nav-bar">
-    <button class="nav-btn active" onclick="showTab('tab-ask',this)">
+    <button class="nav-btn active" onclick="showTab('tab-arch',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      Architecture
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-kb',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Knowledge Base
+    </button>
+    <button class="nav-btn" onclick="showTab('tab-ask',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Ask Question
     </button>
     <button class="nav-btn" onclick="showTab('tab-compare',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM7 21h10M12 3v18"/></svg>
       Compare: RAG vs No-RAG
-    </button>
-    <button class="nav-btn" onclick="showTab('tab-kb',this)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Knowledge Base
-    </button>
-    <button class="nav-btn" onclick="showTab('tab-arch',this)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-      Architecture
     </button>
     <button class="nav-btn" onclick="showTab('tab-status',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -387,7 +381,7 @@
   <div class="container">
 
     <!-- TAB 1: ASK QUESTION -->
-    <div id="tab-ask" class="tab active">
+    <div id="tab-ask" class="tab">
       <div class="card">
         <h2>Ask PolicyCheck</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
@@ -505,7 +499,7 @@
     </div>
 
     <!-- TAB 4: ARCHITECTURE -->
-    <div id="tab-arch" class="tab">
+    <div id="tab-arch" class="tab active">
       <div class="card">
         <h2>Application Architecture</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">
@@ -518,26 +512,76 @@
           <div class="abox">
             UI / App Service
             <div class="aport">app.py · :8080</div>
+            <div class="arole">Serves UI, handles browser requests</div>
           </div>
-          <div style="color:var(--text-muted);font-size:18px">↓ HTTP API calls</div>
+          <div style="color:var(--text-muted);font-size:18px">↓ POST /api/rag-ask-pipeline</div>
           <div class="abox">
-            Docker Orchestration Service
+            Orchestration Service
             <div class="aport">orchestration_service.py · :8000</div>
+            <div class="arole">Coordinates full RAG pipeline</div>
           </div>
-          <div style="color:var(--text-muted);font-size:18px">↓ host.docker.internal</div>
+          <div style="color:var(--text-muted);font-size:14px;margin:6px 0">↙ POST /retrieve &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; POST /generate ↘</div>
 
-          <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:10px">
+          <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:4px">
             <div class="abox">
               Retrieval Service
               <div class="aport">retrieval_service.py · :8001</div>
-              <div class="arole">nomic-embed-text</div>
+              <div class="arole">Query embed → cosine similarity → top-3 chunks</div>
             </div>
             <div class="abox">
               LLM Service
               <div class="aport">llm_service.py · :8002</div>
-              <div class="arole">Code Llama</div>
+              <div class="arole">Context + question → grounded answer</div>
             </div>
           </div>
+
+          <div style="color:var(--text-muted);font-size:14px;margin:6px 0">↓ host.docker.internal:11434</div>
+
+          <div class="abox" style="border-color:var(--accent-indigo)">
+            Ollama
+            <div class="aport">:11434 · runs on host machine</div>
+            <div class="arole">nomic-embed-text (embeddings) · qwen2.5:0.5b / tinyllama:1.1b / codellama:latest (generation)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Knowledge Base Build Pipeline</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">One-time setup to process PDFs into searchable vector embeddings.</p>
+        <div class="arch">
+          <div class="abox">
+            PDF Documents
+            <div class="arole">CGST Act · IT Act · Consumer Protection Act · Essential Commodities Act</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:14px">↓ chunk_documents.py</div>
+          <div class="abox">
+            chunks.json
+            <div class="arole">590 text chunks · 1500 chars each · 200 char overlap</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:14px">↓ create_embeddings.py · nomic-embed-text via Ollama</div>
+          <div class="abox">
+            embeddings.json
+            <div class="arole">590 × 768-dimensional float vectors</div>
+          </div>
+          <div style="color:var(--text-muted);font-size:14px">↓ loaded into memory at startup</div>
+          <div class="abox">
+            Retrieval Service
+            <div class="arole">Ready to search at query time via cosine similarity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Tech Stack</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Language</div><div style="color:var(--text-muted)">Python 3.12</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Web Framework</div><div style="color:var(--text-muted)">FastAPI + Uvicorn</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">LLM Runtime</div><div style="color:var(--text-muted)">Ollama (local inference)</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Embedding Model</div><div style="color:var(--text-muted)">nomic-embed-text (768-dim)</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Vector Search</div><div style="color:var(--text-muted)">NumPy cosine similarity</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Containerisation</div><div style="color:var(--text-muted)">Docker + Docker Compose</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">PDF Processing</div><div style="color:var(--text-muted)">pypdf (1500-char chunks)</div></div>
+          <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:8px;padding:12px;font-size:12px"><div style="font-weight:700;margin-bottom:4px">Deployment</div><div style="color:var(--text-muted)">AWS EC2 (Ubuntu)</div></div>
         </div>
       </div>
     </div>
@@ -555,6 +599,23 @@
         <h2>Model Summary Metrics</h2>
         <div id="week4-summary-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
           <div style="color:var(--text-muted)">Loading evaluation results...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Category-wise Model Comparison</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Same 25 questions evaluated across all 3 models, broken down by task type. Shows which model performs best for each category of task.
+        </p>
+        <div id="week4-category-table">
+          <div style="color:var(--text-muted)">Loading category analysis...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Best Model Per Category</h2>
+        <div id="week4-best-model-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+          <div style="color:var(--text-muted)">Loading...</div>
         </div>
       </div>
 
@@ -993,11 +1054,22 @@ async function loadWeek4Results() {
       return;
     }
 
-    // Populate summary metrics
+    // Overall summary cards
     renderWeek4Summary(data.summary);
-    
-    // Populate detailed results table
+
+    // Category-wise comparison table
+    if (data.category_analysis) {
+      renderWeek4CategoryTable(data.category_analysis, data.best_model_per_category || {});
+    }
+
+    // Best model per category grid
+    if (data.best_model_per_category) {
+      renderBestModelGrid(data.best_model_per_category);
+    }
+
+    // Detailed results table
     renderWeek4ResultsTable(data.results, data.questions);
+
   } catch (err) {
     console.error('Error loading Week 4 results:', err);
     document.getElementById('week4-summary-grid').innerHTML = '<div style="color:#f87171">Error: ' + err.message + '</div>';
@@ -1024,6 +1096,157 @@ function renderWeek4Summary(summary) {
       </div>
     `;
   }).join('');
+}
+
+function renderWeek4CategoryTable(categoryAnalysis, bestModelPerCategory) {
+  const MODELS = ['codellama:latest', 'qwen2.5:0.5b', 'tinyllama:1.1b'];
+  const MODEL_SHORT = {
+    'codellama:latest': 'CodeLlama',
+    'qwen2.5:0.5b':     'Qwen 2.5',
+    'tinyllama:1.1b':   'TinyLLaMA'
+  };
+
+  const categories = Object.keys(categoryAnalysis);
+  if (!categories.length) {
+    document.getElementById('week4-category-table').innerHTML = '<div style="color:#f87171">No category data available.</div>';
+    return;
+  }
+
+  let rows = '';
+  for (const cat of categories) {
+    const catData = categoryAnalysis[cat];
+    const best    = bestModelPerCategory[cat] || {};
+    const catId   = cat.replace(/\s+/g, '-').toLowerCase();
+
+    // Questions for this category (stored on catData)
+    const questionsList = (catData.question_ids || []).join(', ');
+    const perQDetail = (catData.models?.['qwen2.5:0.5b']?.per_question || []);
+
+    // Build expandable questions block
+    let questionsHtml = '';
+    if (perQDetail.length) {
+      questionsHtml = perQDetail.map(q => `
+        <tr id="qrow-${catId}-${esc(q.question_id)}" style="display:none;background:#fafafa;font-size:11px">
+          <td style="padding:6px 8px 6px 32px;color:var(--accent-indigo);font-weight:700">${esc(q.question_id)}</td>
+          <td colspan="6" style="padding:6px 8px;color:var(--text-sub)">${esc(q.question)}</td>
+        </tr>`).join('');
+    } else {
+      questionsHtml = `<tr id="qrow-${catId}-placeholder" style="display:none">
+        <td colspan="7" style="padding:6px 8px 6px 32px;font-size:11px;color:var(--text-muted)">${questionsList}</td>
+      </tr>`;
+    }
+
+    // Category header row with toggle button
+    rows += `
+      <tr style="background:#f1f5f9">
+        <td colspan="7" style="font-weight:700;font-size:13px;padding:10px 16px;border-bottom:2px solid var(--accent-indigo)">
+          ${esc(cat)}
+          <span style="font-size:11px;color:var(--text-muted);font-weight:500;margin-left:8px">${catData.question_count} questions</span>
+          <button onclick="toggleCatQuestions('${catId}', ${perQDetail.length || catData.question_ids.length})"
+            id="btn-${catId}"
+            style="margin-left:12px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:6px;padding:2px 10px;font-size:11px;cursor:pointer;color:var(--accent-indigo);font-weight:600">
+            View Questions
+          </button>
+        </td>
+      </tr>
+      ${questionsHtml}`;
+
+    // Model metric rows
+    for (const model of MODELS) {
+      const m = (catData.models || {})[model];
+      if (!m) continue;
+      const isBestCorr  = best.correctness   === model;
+      const isFastest   = best.latency       === model;
+      const isLeastHall = best.hallucination === model;
+      const rhr = m.retrieval_hit_rate != null ? (m.retrieval_hit_rate * 100).toFixed(1) + '%' : 'N/A';
+      rows += `
+        <tr style="font-size:12px">
+          <td style="padding-left:24px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:11px">${esc(MODEL_SHORT[model] || model)}</td>
+          <td>
+            <span style="font-weight:700;color:${isBestCorr ? 'var(--accent-emerald)' : 'var(--text-main)'}">${m.avg_correctness.toFixed(2)}/2</span>
+            ${isBestCorr ? '<span style="font-size:10px;background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:8px;margin-left:4px">BEST</span>' : ''}
+          </td>
+          <td>${m.avg_relevance.toFixed(2)}</td>
+          <td>
+            <span style="color:${isFastest ? 'var(--accent-emerald)' : 'var(--text-main)'}">${m.avg_latency_ms.toFixed(0)}ms</span>
+            ${isFastest ? '<span style="font-size:10px;background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:8px;margin-left:4px">FASTEST</span>' : ''}
+          </td>
+          <td>
+            <span style="color:${isLeastHall ? 'var(--accent-emerald)' : (m.hallucination_count > 0 ? 'var(--accent-rose)' : 'var(--text-main)')}">${m.hallucination_count}</span>
+            ${isLeastHall && m.hallucination_count === 0 ? '<span style="font-size:10px;background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:8px;margin-left:4px">None</span>' : ''}
+          </td>
+          <td>${rhr}</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${m.avg_llm_latency_ms.toFixed(0)}ms</td>
+        </tr>`;
+    }
+  }
+
+  const html = `
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:var(--bg-input)">
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color);min-width:130px">Model</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">Correctness</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">Relevance</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">Avg Latency</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">Hallucinations</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">Retrieval Hit</th>
+            <th style="text-align:left;padding:10px 16px;border-bottom:1px solid var(--border-color)">LLM Time</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+
+  document.getElementById('week4-category-table').innerHTML = html;
+}
+
+function toggleCatQuestions(catId, count) {
+  const btn = document.getElementById('btn-' + catId);
+  // Try per-question rows first, fall back to placeholder
+  let rows = document.querySelectorAll(`[id^="qrow-${catId}-"]`);
+  if (!rows.length) return;
+  const isHidden = rows[0].style.display === 'none';
+  rows.forEach(r => r.style.display = isHidden ? 'table-row' : 'none');
+  btn.textContent = isHidden ? 'Hide Questions' : 'View Questions';
+}
+
+function renderBestModelGrid(bestModelPerCategory) {
+  const CAT_COLORS = {
+    'Explanation':              'var(--accent-indigo)',
+    'Retrieval':                'var(--accent-blue)',
+    'Dependency Understanding': '#8b5cf6',
+    'Bug Analysis':             'var(--accent-rose)',
+    'RAG-based Question':       'var(--accent-emerald)',
+    'Hallucination Trap':       '#f59e0b'
+  };
+  const MODEL_SHORT = {
+    'codellama:latest': 'CodeLlama',
+    'qwen2.5:0.5b':     'Qwen 2.5',
+    'tinyllama:1.1b':   'TinyLLaMA'
+  };
+
+  const grid = document.getElementById('week4-best-model-grid');
+  grid.innerHTML = Object.entries(bestModelPerCategory).map(([cat, best]) => `
+    <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;padding:14px;border-top:3px solid ${CAT_COLORS[cat] || 'var(--accent-indigo)'}">
+      <div style="font-weight:700;font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">${esc(cat)}</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-muted)">Most Accurate</span>
+          <strong style="color:var(--accent-emerald)">${esc(MODEL_SHORT[best.correctness] || best.correctness)}</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-muted)">Fastest</span>
+          <strong style="color:var(--accent-blue)">${esc(MODEL_SHORT[best.latency] || best.latency)}</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-muted)">Least Hallucination</span>
+          <strong style="color:#8b5cf6">${esc(MODEL_SHORT[best.hallucination] || best.hallucination)}</strong>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function renderWeek4ResultsTable(results, questions) {

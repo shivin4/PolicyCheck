@@ -1106,74 +1106,118 @@ QUESTION:
 @app.get("/api/week4-results")
 def week4_results():
     """
-    Return Week 4 evaluation results from evaluation_results.json
-    Includes summary metrics per model and detailed per-question results
+    Return Week 4 evaluation results including:
+    - Overall summary metrics per model
+    - Category-wise breakdown per model (the professor's requirement)
+    - Detailed per-question results
     """
     import json
     from pathlib import Path
-    
-    eval_results_path = Path("evaluation_results.json")
-    eval_dataset_path = Path("evaluation_dataset.json")
-    
+
+    eval_results_path   = Path("evaluation_results.json")
+    eval_dataset_path   = Path("evaluation_dataset.json")
+    category_analysis_path = Path("category_analysis.json")
+
     if not eval_results_path.exists() or not eval_dataset_path.exists():
-        return {
-            "success": False,
-            "error": "Evaluation files not found. Run run_evaluation.py first."
-        }
-    
+        return {"success": False, "error": "Evaluation files not found."}
+
     try:
         with open(eval_results_path, "r", encoding="utf-8") as f:
             eval_data = json.load(f)
-        
         with open(eval_dataset_path, "r", encoding="utf-8") as f:
             dataset = json.load(f)
-        
+
         questions = dataset.get("questions", [])
-        results = eval_data.get("results", [])
-        
-        # Calculate summary metrics per model
+        results   = eval_data.get("results", [])
+        MODELS    = ["codellama:latest", "qwen2.5:0.5b", "tinyllama:1.1b"]
+
+        # ── Overall summary per model ──────────────────────────
         summary = {}
-        models = set(r["model"] for r in results)
-        
-        for model in models:
-            model_results = [r for r in results if r["model"] == model]
-            
-            avg_correctness = sum(r.get("correctness_score") or 0 for r in model_results) / len(model_results) if model_results else 0
-            avg_relevance = sum(r.get("relevance_score") or 0 for r in model_results) / len(model_results) if model_results else 0
-            avg_latency = sum(r.get("latency_ms") or 0 for r in model_results) / len(model_results) if model_results else 0
-            avg_llm_latency = sum(r.get("llm_latency_ms") or 0 for r in model_results) / len(model_results) if model_results else 0
-            hallucination_count = sum(1 for r in model_results if r.get("hallucination"))
-            
+        for model in MODELS:
+            mr = [r for r in results if r["model"] == model]
+            if not mr:
+                continue
+            n = len(mr)
             retrieval_scores = [
                 r["retrieval_quality"]["retrieval_quality_score"]
-                for r in model_results
-                if isinstance(r.get("retrieval_quality"), dict) and r["retrieval_quality"].get("retrieval_quality_score") is not None
+                for r in mr
+                if isinstance(r.get("retrieval_quality"), dict)
+                and r["retrieval_quality"].get("retrieval_quality_score") is not None
             ]
-            retrieval_hit_rate = (sum(retrieval_scores) / len(retrieval_scores)) if retrieval_scores else 0
-            
             summary[model] = {
-                "avg_correctness": avg_correctness,
-                "avg_relevance": avg_relevance,
-                "avg_latency": avg_latency,
-                "avg_llm_latency": avg_llm_latency,
-                "hallucination_count": hallucination_count,
-                "retrieval_hit_rate": retrieval_hit_rate,
-                "total_evaluated": len(model_results),
+                "avg_correctness":     round(sum(r.get("correctness_score") or 0 for r in mr) / n, 3),
+                "avg_relevance":       round(sum(r.get("relevance_score")   or 0 for r in mr) / n, 3),
+                "avg_latency":         round(sum(r.get("latency_ms")        or 0 for r in mr) / n, 1),
+                "avg_llm_latency":     round(sum(r.get("llm_latency_ms")    or 0 for r in mr) / n, 1),
+                "hallucination_count": sum(1 for r in mr if r.get("hallucination")),
+                "retrieval_hit_rate":  round(sum(retrieval_scores) / len(retrieval_scores), 3) if retrieval_scores else 0,
+                "total_evaluated":     n,
             }
-        
+
+        # ── Category-wise analysis ─────────────────────────────
+        # Load pre-generated file if exists, else compute inline
+        category_analysis = {}
+        best_model_per_category = {}
+
+        if category_analysis_path.exists():
+            with open(category_analysis_path, "r", encoding="utf-8") as f:
+                cat_data = json.load(f)
+            category_analysis       = cat_data.get("category_analysis", {})
+            best_model_per_category = cat_data.get("best_model_per_category", {})
+        else:
+            # Compute inline if file missing
+            q_to_task = {q["id"]: q.get("task_category", "Uncategorized") for q in questions}
+            task_cats = list(dict.fromkeys(q_to_task.values()))  # preserve order, unique
+
+            for task_cat in task_cats:
+                cat_qids = [q["id"] for q in questions if q.get("task_category") == task_cat]
+                category_analysis[task_cat] = {
+                    "question_ids":   cat_qids,
+                    "question_count": len(cat_qids),
+                    "models": {}
+                }
+                for model in MODELS:
+                    mr = [r for r in results if r["model"] == model and r["question_id"] in cat_qids]
+                    if not mr:
+                        continue
+                    n = len(mr)
+                    rs = [
+                        r["retrieval_quality"]["retrieval_quality_score"]
+                        for r in mr
+                        if isinstance(r.get("retrieval_quality"), dict)
+                        and r["retrieval_quality"].get("retrieval_quality_score") is not None
+                    ]
+                    category_analysis[task_cat]["models"][model] = {
+                        "n":                   n,
+                        "avg_correctness":     round(sum(r.get("correctness_score") or 0 for r in mr) / n, 3),
+                        "avg_relevance":       round(sum(r.get("relevance_score")   or 0 for r in mr) / n, 3),
+                        "avg_latency_ms":      round(sum(r.get("latency_ms")        or 0 for r in mr) / n, 1),
+                        "avg_llm_latency_ms":  round(sum(r.get("llm_latency_ms")    or 0 for r in mr) / n, 1),
+                        "hallucination_count": sum(1 for r in mr if r.get("hallucination")),
+                        "retrieval_hit_rate":  round(sum(rs) / len(rs), 3) if rs else None,
+                    }
+
+                scores = {m: category_analysis[task_cat]["models"].get(m, {}).get("avg_correctness", 0) for m in MODELS}
+                lats   = {m: category_analysis[task_cat]["models"].get(m, {}).get("avg_latency_ms", 99999) for m in MODELS}
+                halls  = {m: category_analysis[task_cat]["models"].get(m, {}).get("hallucination_count", 99) for m in MODELS}
+                best_model_per_category[task_cat] = {
+                    "correctness":    max(scores, key=scores.get),
+                    "latency":        min(lats,   key=lats.get),
+                    "hallucination":  min(halls,  key=halls.get),
+                }
+
         return {
-            "success": True,
-            "summary": summary,
-            "results": results,
-            "questions": questions,
-            "metadata": eval_data.get("metadata", {})
+            "success":               True,
+            "summary":               summary,
+            "category_analysis":     category_analysis,
+            "best_model_per_category": best_model_per_category,
+            "results":               results,
+            "questions":             questions,
+            "metadata":              eval_data.get("metadata", {}),
         }
-        
+
     except Exception as e:
-        return {
-            "success": False,
-            "error": f"Failed to load evaluation results: {str(e)}"
-        }
+        return {"success": False, "error": f"Failed to load evaluation results: {str(e)}"}
 
 
 # ── Health checks ─────────────────────────────────────────────────────────────

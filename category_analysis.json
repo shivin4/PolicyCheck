@@ -1,0 +1,1424 @@
+{
+  "metadata": {
+    "generated_from": [
+      "evaluation_results.json",
+      "evaluation_dataset.json"
+    ],
+    "models": [
+      "codellama:latest",
+      "qwen2.5:0.5b",
+      "tinyllama:1.1b"
+    ],
+    "task_categories": [
+      "Explanation",
+      "Retrieval",
+      "Dependency Understanding",
+      "Bug Analysis",
+      "RAG-based Question",
+      "Hallucination Trap"
+    ],
+    "total_questions": 25,
+    "total_results": 75
+  },
+  "category_analysis": {
+    "Explanation": {
+      "question_ids": [
+        "Q01",
+        "Q02",
+        "Q05",
+        "Q10",
+        "Q16",
+        "Q21"
+      ],
+      "question_count": 6,
+      "models": {
+        "codellama:latest": {
+          "n": 6,
+          "avg_correctness": 1.833,
+          "avg_relevance": 0.6,
+          "avg_latency_ms": 38030.5,
+          "avg_llm_latency_ms": 37518.3,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q01",
+              "question": "What is the Central Goods and Services Tax (CGST) Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.6,
+              "latency_ms": 37449,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Central Goods and Services Tax Act, 2017, is an Indian law that provides for levy and collection of tax on intra-State supply of goods or services or both by the Central Government. It was enacted",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q02",
+              "question": "What is the meaning of 'aggregate turnover' under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.3333,
+              "latency_ms": 39625,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The word \"aggregate turnover\" refers to the sum of all the taxable goods or services that are provided or received by a person, excluding the value of inward supplies on which tax is payable by a pers",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q05",
+              "question": "What is a 'composite supply' under the CGST Act and how is it taxed?",
+              "correctness_score": 2,
+              "relevance_score": 0.6667,
+              "latency_ms": 40049,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "A composite supply refers to a supply made by a taxable person to a recipient consisting of two or more taxable supplies of goods or services, which are naturally bundled and supplied in conjunction w",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q10",
+              "question": "Who is defined as a 'consumer' under the Consumer Protection Act, 2019?",
+              "correctness_score": 1,
+              "relevance_score": 0.5,
+              "latency_ms": 32927,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "A consumer is defined as any person who purchases goods or services from a trader or service provider. The definition also includes minor consumers, legal heirs or legal guardians of deceased consumer",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q16",
+              "question": "What is the purpose of the Information Technology Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 39806,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The purpose of the Information Technology Act, 2000 (ITA 2000) is to provide legal recognition for transactions carried out by means of electronic data interchange and other means of electronic commun",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q21",
+              "question": "What is the Essential Commodities Act, 1955, and what is its purpose?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 38327,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Essential Commodities Act, 1955, was an act passed in India to control the production, supply, and distribution of certain essential commodities. The main purpose of this act was to provide for th",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 6,
+          "avg_correctness": 1.5,
+          "avg_relevance": 0.583,
+          "avg_latency_ms": 14079.0,
+          "avg_llm_latency_ms": 5717.5,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q01",
+              "question": "What is the Central Goods and Services Tax (CGST) Act?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 49817,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            },
+            {
+              "question_id": "Q02",
+              "question": "What is the meaning of 'aggregate turnover' under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.8333,
+              "latency_ms": 10113,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The meaning of \"aggregate turnover\" as it relates to the CGST Act is:\n\n1. It refers to the sum of all taxable supplies, exempt supplies, exports, and inter-State supplies on an all-India basis.\n\n2. Th",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q05",
+              "question": "What is a 'composite supply' under the CGST Act and how is it taxed?",
+              "correctness_score": 2,
+              "relevance_score": 0.6667,
+              "latency_ms": 5576,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "A 'composite supply' under the CGST Act refers to a supply made by a taxable person to a recipient consisting of two or more taxable supplies of goods or services or both, which are naturally bundled ",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q10",
+              "question": "Who is defined as a 'consumer' under the Consumer Protection Act, 2019?",
+              "correctness_score": 1,
+              "relevance_score": 0.75,
+              "latency_ms": 6393,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "According to the Consumer Protection Act, 2019:\n\n1. A consumer means—\n   - A person who is a citizen of India or any state of India and engages in consumption activities.\n   - A person who is not a me",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q16",
+              "question": "What is the purpose of the Information Technology Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.5,
+              "latency_ms": 5367,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Information Technology Act, 2000 (ITA) was enacted with the goal of providing legal recognition for transactions carried out by means of electronic data interchange and other means of electronic c",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q21",
+              "question": "What is the Essential Commodities Act, 1955, and what is its purpose?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 7208,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Essential Commodities Act, 1955, is an Indian act that aims to provide for the control of the production, supply, and distribution of certain commodities. The main provisions in this act include:\n",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 6,
+          "avg_correctness": 1.833,
+          "avg_relevance": 0.592,
+          "avg_latency_ms": 9076.5,
+          "avg_llm_latency_ms": 9000.5,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q01",
+              "question": "What is the Central Goods and Services Tax (CGST) Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.8,
+              "latency_ms": 7136,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Central Goods and Services Tax (CGST) Act is an act in the Indian Union, which levies tax on both goods and services. It was enacted by the Parliament in the Sixty-Eighth Year of the Republic of I",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q02",
+              "question": "What is the meaning of 'aggregate turnover' under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.1667,
+              "latency_ms": 8537,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The answer is: \"Exclusively in the business of supply or receipt of goods or services or both on behalf of another; (6) ‘aggregate value’ means the aggregate value of all taxable supplies (excluding t",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q05",
+              "question": "What is a 'composite supply' under the CGST Act and how is it taxed?",
+              "correctness_score": 2,
+              "relevance_score": 0.8333,
+              "latency_ms": 12626,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "A \"composite supply\" under the Comprehensive Goods and Services Tax (CGST) Act is a supply of goods or services made by one person to another, whereby there are two or more taxable supplies associated",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q10",
+              "question": "Who is defined as a 'consumer' under the Consumer Protection Act, 2019?",
+              "correctness_score": 1,
+              "relevance_score": 0.5,
+              "latency_ms": 6489,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "As per Section 4 of the Consumer Protection Act, 2019, a 'consumer' means anyone who has to do with procurement or use of goods, or services. This includes any individual, firm, association or organis",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q16",
+              "question": "What is the purpose of the Information Technology Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.5,
+              "latency_ms": 8526,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Information Technology Act, 2000 aims to provide legal recognition for transactions carried out by means of electronic data interchange and other means of electronic communication commonly referre",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q21",
+              "question": "What is the Essential Commodities Act, 1955, and what is its purpose?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 11145,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Essential Commodieties Act, 1955 or \"ECA\" as it is commonly referred to, is a special law in India that regulates the production, supply, trade, and marketing of certain essential commodities. The",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Retrieval": {
+      "question_ids": [
+        "Q03",
+        "Q07",
+        "Q08",
+        "Q11",
+        "Q20"
+      ],
+      "question_count": 5,
+      "models": {
+        "codellama:latest": {
+          "n": 5,
+          "avg_correctness": 1.2,
+          "avg_relevance": 0.558,
+          "avg_latency_ms": 34363.2,
+          "avg_llm_latency_ms": 26003.4,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q03",
+              "question": "Who is liable for registration under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 1.0,
+              "latency_ms": 34984,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Under section 22 of the Central Goods and Services Tax (CGST) Act, a person who makes a taxable supply of goods or services or both from any place in India is liable to be registered under this Act. T",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q07",
+              "question": "What is the validity period of registration for a casual taxable person under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.8889,
+              "latency_ms": 26296,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The validity period of registration for a casual taxable person under the CGST Act is 90 days from the effective date of registration, or until the issuance of the certificate of registration, whichev",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q08",
+              "question": "Under the CGST Act, is an agriculturist required to register for GST on the supply of agricultural produce?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 38245,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            },
+            {
+              "question_id": "Q11",
+              "question": "What are the six consumer rights recognised under the Consumer Protection Act, 2019?",
+              "correctness_score": 1,
+              "relevance_score": 0.5,
+              "latency_ms": 41965,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Consumer Protection Act, 2019 recognises the following six consumer rights:\n\n1. Right to information on goods and services offered by any seller or promoter.\n2. Right to buy a good or service with",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q20",
+              "question": "What is the meaning of 'cyber security' as defined in the IT Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.4,
+              "latency_ms": 30326,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The IT Act defines \"cyber security\" as protecting information, equipment, devices, computer, computer resource, communication device and information stored therein from unauthorized access, use, discl",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 5,
+          "avg_correctness": 1.8,
+          "avg_relevance": 0.771,
+          "avg_latency_ms": 5600.2,
+          "avg_llm_latency_ms": 5515.0,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q03",
+              "question": "Who is liable for registration under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.5,
+              "latency_ms": 4228,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The person whose aggregate turnover in a financial year exceeds twenty lakh rupees is liable for registration.",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q07",
+              "question": "What is the validity period of registration for a casual taxable person under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.8889,
+              "latency_ms": 5824,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The validity period of registration for a casual taxable person under the CGST Act is specified in sub-section (1) of section 27. Specifically, \"A casual taxable person or a non-resident taxable perso",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q08",
+              "question": "Under the CGST Act, is an agriculturist required to register for GST on the supply of agricultural produce?",
+              "correctness_score": 2,
+              "relevance_score": 1.0,
+              "latency_ms": 6004,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, according to the provided document, under the CGST Act, a person who is engaged exclusively in the supply of agricultural produce shall be required to be registered. This regulation is contained ",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q11",
+              "question": "What are the six consumer rights recognised under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.6667,
+              "latency_ms": 6309,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The six consumer rights recognized under the Consumer Protection Act, 2019 are:\n\n1. Right to be informed about products/services and prices.\n2. Right to seek redressal for breaches of contract.\n3. Rig",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q20",
+              "question": "What is the meaning of 'cyber security' as defined in the IT Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.8,
+              "latency_ms": 5636,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The meaning of 'cyber security' as defined in the IT Act, 2000 is protecting information, equipment, devices, computer resources, communication devices and information stored therein from unauthorised",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 5,
+          "avg_correctness": 1.0,
+          "avg_relevance": 0.749,
+          "avg_latency_ms": 8138.8,
+          "avg_llm_latency_ms": 8059.2,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q03",
+              "question": "Who is liable for registration under the CGST Act?",
+              "correctness_score": 0,
+              "relevance_score": 0.75,
+              "latency_ms": 11842,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Every person who makes a taxable supply from the territorial waters of India shall obtain registration in the coastal State or Union territory where the nearest point of the appropritate baseline is l",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q07",
+              "question": "What is the validity period of registration for a casual taxable person under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.8889,
+              "latency_ms": 5036,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The validity period of registration for a casual taxable person under the CGST Act is not specified in the context. This information can be found in the applicable provision, such as sub-section (1) o",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q08",
+              "question": "Under the CGST Act, is an agriculturist required to register for GST on the supply of agricultural produce?",
+              "correctness_score": 1,
+              "relevance_score": 0.875,
+              "latency_ms": 4914,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, an agriculturiist is required to register for GST on the supply of agricultural produce under the CGST Act. The relevant section of the Act is Section 23 of the CGST Act.",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q11",
+              "question": "What are the six consumer rights recognised under the Consumer Protection Act, 2019?",
+              "correctness_score": 1,
+              "relevance_score": 0.8333,
+              "latency_ms": 9792,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Six consumer rights recognised under the Consumer Protection Act, 2019 are as follows:\n\n1. Right to be informed: The consumer is entitled to receive information about goods or services before making a",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q20",
+              "question": "What is the meaning of 'cyber security' as defined in the IT Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.4,
+              "latency_ms": 9110,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The IT Act, 2000 defines cyber security as \"protecting information, equipment, devices, computer, communication device and information stored therein from unauthorized access, use, disclosure, disrupt",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Dependency Understanding": {
+      "question_ids": [
+        "Q04",
+        "Q12",
+        "Q17",
+        "Q22"
+      ],
+      "question_count": 4,
+      "models": {
+        "codellama:latest": {
+          "n": 4,
+          "avg_correctness": 0.5,
+          "avg_relevance": 0.179,
+          "avg_latency_ms": 46181.5,
+          "avg_llm_latency_ms": 7299.8,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q04",
+              "question": "What are the conditions a registered person must satisfy to claim Input Tax Credit (ITC) under the CGST Act?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 50672,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            },
+            {
+              "question_id": "Q12",
+              "question": "What constitutes an 'unfair trade practice' under the Consumer Protection Act, 2019?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 50191,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            },
+            {
+              "question_id": "Q17",
+              "question": "What is the penalty for unauthorised access to a computer system under the IT Act, 2000?",
+              "correctness_score": 2,
+              "relevance_score": 0.7143,
+              "latency_ms": 29483,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The penalty for unauthorized access to a computer system under the IT Act, 2000 is imprisonment up to three years or with fine which may extend to two lakh rupees.",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q22",
+              "question": "What powers does the Central Government have to control the supply and distribution of essential commodities?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 54380,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 4,
+          "avg_correctness": 0.75,
+          "avg_relevance": 0.811,
+          "avg_latency_ms": 6384.0,
+          "avg_llm_latency_ms": 6307.0,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q04",
+              "question": "What are the conditions a registered person must satisfy to claim Input Tax Credit (ITC) under the CGST Act?",
+              "correctness_score": 0,
+              "relevance_score": 0.9091,
+              "latency_ms": 6355,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The conditions a registered person must satisfy to claim Input Tax Credit (ITC) under the CGST Act are:\n\n1. The registered person is either paying tax at a fixed rate or paying a fixed amount in lieu ",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q12",
+              "question": "What constitutes an 'unfair trade practice' under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 6569,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "According to the policy documents provided in the context, an \"unfair trade practice\" under the Consumer Protection Act, 2019 includes:\n\n- Making any statement that falsely represents goods or service",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q17",
+              "question": "What is the penalty for unauthorised access to a computer system under the IT Act, 2000?",
+              "correctness_score": 0,
+              "relevance_score": 0.8571,
+              "latency_ms": 6434,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The answer provided does not contain the specific information requested in the question. It appears to be a direct quote from another document rather than an answer. Therefore, I could not find this i",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q22",
+              "question": "What powers does the Central Government have to control the supply and distribution of essential commodities?",
+              "correctness_score": 1,
+              "relevance_score": 0.7273,
+              "latency_ms": 6178,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Central Government has the following powers to control the supply and distribution of essential commodities:\n\n1. To regulate or prohibit the production, supply and distribution thereof and trade a",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 4,
+          "avg_correctness": 1.25,
+          "avg_relevance": 0.684,
+          "avg_latency_ms": 10226.0,
+          "avg_llm_latency_ms": 10145.8,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q04",
+              "question": "What are the conditions a registered person must satisfy to claim Input Tax Credit (ITC) under the CGST Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.9091,
+              "latency_ms": 14428,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The conditions a registered person must satisfy to claim Input Tax Credit (ITC) under the CGST Act include:\n\n1. Eligibility criteria: The registered person must be eligible for ITC on account of input",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q12",
+              "question": "What constitutes an 'unfair trade practice' under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.75,
+              "latency_ms": 9111,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Constitution of India provides for the protection and welfare of consumers. The Consumer Protection Act, 2019 aims to ensure consumer rights and provide remedies against unfair trade practices by ",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q17",
+              "question": "What is the penalty for unauthorised access to a computer system under the IT Act, 2000?",
+              "correctness_score": 1,
+              "relevance_score": 0.7143,
+              "latency_ms": 6575,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The penalty for unauthorized access to a computer system under the IT Act, 2000 is imprisonment up to three years or fine which may extend up to two lakhs rupees or both.",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q22",
+              "question": "What powers does the Central Government have to control the supply and distribution of essential commodities?",
+              "correctness_score": 0,
+              "relevance_score": 0.3636,
+              "latency_ms": 10790,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The Central (Amendment). [Vide Utter Pradesh Act XVI of 1978, s. 2]\nSource: Dataset/pdfs/Labour/essential_commodities.pdf\n\nSection 4 provides that \"Essential commodiities declaration, etc.\" means a co",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Bug Analysis": {
+      "question_ids": [
+        "Q06",
+        "Q18",
+        "Q19",
+        "Q23",
+        "Q24"
+      ],
+      "question_count": 5,
+      "models": {
+        "codellama:latest": {
+          "n": 5,
+          "avg_correctness": 1.2,
+          "avg_relevance": 0.725,
+          "avg_latency_ms": 47865.4,
+          "avg_llm_latency_ms": 32366.6,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q06",
+              "question": "What are the penalties for committing fraud or wilful misstatement under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.875,
+              "latency_ms": 39920,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The penalties for committing fraud or wilful misstatement under the CGST Act can be quite severe. The act provides for a fine of up to 50,000 rupees in cases where a person has committed a serious off",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q18",
+              "question": "What is a 'protected system' under the IT Act, 2000, and what are the consequences of unauthorised access to it?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 75648,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            },
+            {
+              "question_id": "Q19",
+              "question": "Under the IT Act, 2000, can a company be held liable for a cyber offence committed by one of its employees?",
+              "correctness_score": 1,
+              "relevance_score": 1.0,
+              "latency_ms": 37765,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, under the IT Act, 2000, a company can be held liable for a cyber offense committed by one of its employees. The Act provides that where an offense under this Act has been committed by a company a",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q23",
+              "question": "What is the punishment for violating an order issued under the Essential Commodities Act, 1955?",
+              "correctness_score": 2,
+              "relevance_score": 0.875,
+              "latency_ms": 40563,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The punishment for violating an order issued under the Essential Commodities Act, 1955, is imprisonment for a term which may extend to one year and shall also be liable to fine. In case of an order ma",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            },
+            {
+              "question_id": "Q24",
+              "question": "Can a company be held liable for an offence committed under the Essential Commodities Act?",
+              "correctness_score": 2,
+              "relevance_score": 0.875,
+              "latency_ms": 45431,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, a company can be held liable for an offense committed under the Essential Commodities Act. Section 10 of the Essential Commodities Act provides that \"where an offense has been committed by a comp",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 5,
+          "avg_correctness": 1.6,
+          "avg_relevance": 0.864,
+          "avg_latency_ms": 5704.0,
+          "avg_llm_latency_ms": 5627.8,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q06",
+              "question": "What are the penalties for committing fraud or wilful misstatement under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.875,
+              "latency_ms": 5700,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Based on the information provided in the context, the penalties for committing fraud or wilful misstatement under the CGST Act include:\n\n1. Imprisonment for a term which may extend to three years (Sec",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q18",
+              "question": "What is a 'protected system' under the IT Act, 2000, and what are the consequences of unauthorised access to it?",
+              "correctness_score": 2,
+              "relevance_score": 0.5714,
+              "latency_ms": 5889,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "A 'protected system' under the Information Technology Act, 2000, means any computer resource that directly or indirectly affects the facility of Critical Information Infrastructure. According to secti",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q19",
+              "question": "Under the IT Act, 2000, can a company be held liable for a cyber offence committed by one of its employees?",
+              "correctness_score": 1,
+              "relevance_score": 1.0,
+              "latency_ms": 6804,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, according to the provided context, a company could be held liable for a cyber offense committed by one of its employees. The policy documents mentioned in the context indicate that \"the person sh",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q23",
+              "question": "What is the punishment for violating an order issued under the Essential Commodities Act, 1955?",
+              "correctness_score": 2,
+              "relevance_score": 0.875,
+              "latency_ms": 6025,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The punishment for violating an order issued under the Essential Commodities Act, 1955 is imprisonment. The order may extend to one year and also be liable to fine. For any adequate and special reason",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            },
+            {
+              "question_id": "Q24",
+              "question": "Can a company be held liable for an offence committed under the Essential Commodities Act?",
+              "correctness_score": 2,
+              "relevance_score": 1.0,
+              "latency_ms": 4102,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, a company can be held liable for an offence committed under the Essential Commodities Act. According to the provided policy information in the context, if an offence has been committed by a compa",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 5,
+          "avg_correctness": 1.4,
+          "avg_relevance": 0.736,
+          "avg_latency_ms": 9920.6,
+          "avg_llm_latency_ms": 9834.8,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q06",
+              "question": "What are the penalties for committing fraud or wilful misstatement under the CGST Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.625,
+              "latency_ms": 24862,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The CGST Act provides the following penalties for violating its provisions:\n\n1. General penalty: Any person who commits any offence punishable under Section 6, 7 or 8 of the Act shall be liable to a p",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q18",
+              "question": "What is a 'protected system' under the IT Act, 2000, and what are the consequences of unauthorised access to it?",
+              "correctness_score": 2,
+              "relevance_score": 0.4286,
+              "latency_ms": 6844,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The IT Act, 2000 defines 'Protected System' as any computer resource that directly or indirectly affects the facility of Critical Information Infrastructure. The access or attempted access to such a s",
+              "retrieved_sources": [
+                "it_act.pdf",
+                "it_act.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q19",
+              "question": "Under the IT Act, 2000, can a company be held liable for a cyber offence committed by one of its employees?",
+              "correctness_score": 1,
+              "relevance_score": 1.0,
+              "latency_ms": 6941,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, under the IT Act, 2000, a company can be held liable for a cyber offence committed by one of its employees if they are deemed to have consented or connived the offence, and it is proved that the ",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "it_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q23",
+              "question": "What is the punishment for violating an order issued under the Essential Commodities Act, 1955?",
+              "correctness_score": 2,
+              "relevance_score": 0.875,
+              "latency_ms": 5923,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The punishment for violating an order issued under the Essential Commodities Act, 1955 is imprisonment for a term which may extend to one year and shall also be liable to fine.",
+              "retrieved_sources": [
+                "essential_commodities.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            },
+            {
+              "question_id": "Q24",
+              "question": "Can a company be held liable for an offence committed under the Essential Commodities Act?",
+              "correctness_score": 1,
+              "relevance_score": 0.75,
+              "latency_ms": 5033,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Yes, a company can be held liable for an offence under the Essential Commodiities Act if it is deemed to have knowledge of or has exercise of all due diligence to prevent the commission of such an off",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "essential_commodities.pdf",
+                "essential_commodities.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "RAG-based Question": {
+      "question_ids": [
+        "Q13",
+        "Q14",
+        "Q15"
+      ],
+      "question_count": 3,
+      "models": {
+        "codellama:latest": {
+          "n": 3,
+          "avg_correctness": 0.667,
+          "avg_relevance": 0.569,
+          "avg_latency_ms": 48435.0,
+          "avg_llm_latency_ms": 31781.7,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q13",
+              "question": "How can a consumer file a complaint under the Consumer Protection Act, 2019, and where should it be filed?",
+              "correctness_score": 0,
+              "relevance_score": 0.875,
+              "latency_ms": 40020,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "\nA consumer can file a complaint under the Consumer Protection Act, 2019 by filing an electronic complaint with the Central Consumer Protection Authority or a State Consumer Protection Council. The co",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q14",
+              "question": "What is product liability under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.8333,
+              "latency_ms": 55602,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Product liability under the Consumer Protection Act, 2019 refers to the legal responsibility of a manufacturer, service provider, or seller for harm caused by a defective product. The act covers produ",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q15",
+              "question": "What compensation can a consumer receive under the Consumer Protection Act if they suffer loss due to a defective product?",
+              "correctness_score": 0,
+              "relevance_score": 0,
+              "latency_ms": 49683,
+              "hallucination": false,
+              "retrieval_hit": false,
+              "response_preview": "",
+              "retrieved_sources": []
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 3,
+          "avg_correctness": 1.0,
+          "avg_relevance": 0.71,
+          "avg_latency_ms": 5125.3,
+          "avg_llm_latency_ms": 5050.0,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q13",
+              "question": "How can a consumer file a complaint under the Consumer Protection Act, 2019, and where should it be filed?",
+              "correctness_score": 0,
+              "relevance_score": 0.75,
+              "latency_ms": 5994,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "To file a complaint under the Consumer Protection Act, 2019, the consumer should first contact a District Council. This is specified in section 3 of the policy documents provided.\n\nThe document states",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q14",
+              "question": "What is product liability under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.8333,
+              "latency_ms": 4521,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The product liability under the Consumer Protection Act, 2019, is when a product manufacturer or service provider has a defect in their products.",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q15",
+              "question": "What compensation can a consumer receive under the Consumer Protection Act if they suffer loss due to a defective product?",
+              "correctness_score": 1,
+              "relevance_score": 0.5455,
+              "latency_ms": 4861,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "If you are in a consumer protection dispute where a product is causing harm, you may be able to obtain some form of compensation. The Consumer Protection Act (C.P.A.) in India allows consumers to file",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 3,
+          "avg_correctness": 1.667,
+          "avg_relevance": 0.8,
+          "avg_latency_ms": 11536.0,
+          "avg_llm_latency_ms": 11459.0,
+          "hallucination_count": 0,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q13",
+              "question": "How can a consumer file a complaint under the Consumer Protection Act, 2019, and where should it be filed?",
+              "correctness_score": 1,
+              "relevance_score": 0.75,
+              "latency_ms": 8672,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "To file a complaint under the Consumer Protection Act, 2019 in India, the complainant can either contact the District Commissioner (DC) who is responsible for the district in which there are numerous ",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q14",
+              "question": "What is product liability under the Consumer Protection Act, 2019?",
+              "correctness_score": 2,
+              "relevance_score": 0.8333,
+              "latency_ms": 9573,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "Product liability under the Consumer Protection Act, 2019 refers to a situation where a product manufacturer or service provider can be held accountable for any damage caused to a consumer due to its ",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q15",
+              "question": "What compensation can a consumer receive under the Consumer Protection Act if they suffer loss due to a defective product?",
+              "correctness_score": 2,
+              "relevance_score": 0.8182,
+              "latency_ms": 16363,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "According to ONLY the provided context, the compensation that a consumer can receive under the Consumer Protection Act is the following:\n\n1. Liability of product manufacturer : A product manufacturer ",
+              "retrieved_sources": [
+                "consumer_act.pdf",
+                "consumer_act.pdf",
+                "consumer_act.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Hallucination Trap": {
+      "question_ids": [
+        "Q09",
+        "Q25"
+      ],
+      "question_count": 2,
+      "models": {
+        "codellama:latest": {
+          "n": 2,
+          "avg_correctness": 0.0,
+          "avg_relevance": 0.883,
+          "avg_latency_ms": 33083.5,
+          "avg_llm_latency_ms": 32695.0,
+          "hallucination_count": 2,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q09",
+              "question": "What is the GST rate applicable to export of goods from India?",
+              "correctness_score": 0,
+              "relevance_score": 0.8571,
+              "latency_ms": 32938,
+              "hallucination": true,
+              "retrieval_hit": true,
+              "response_preview": "The GST rate applicable for the export of goods from India is 18%. This can be found in Section 39 of the CGST Act, which states that \"the tax payable by a person on account of zero-rated supplies of ",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q25",
+              "question": "What is the income tax slab rate for individuals earning between 5 lakh and 10 lakh rupees per year in India?",
+              "correctness_score": 0,
+              "relevance_score": 0.9091,
+              "latency_ms": 33229,
+              "hallucination": true,
+              "retrieval_hit": false,
+              "response_preview": "The income tax slab rate for individuals earning between 5 lakh and 10 lakh rupees per year in India is 20%.",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            }
+          ]
+        },
+        "qwen2.5:0.5b": {
+          "n": 2,
+          "avg_correctness": 0.0,
+          "avg_relevance": 0.883,
+          "avg_latency_ms": 5135.5,
+          "avg_llm_latency_ms": 5047.5,
+          "hallucination_count": 2,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q09",
+              "question": "What is the GST rate applicable to export of goods from India?",
+              "correctness_score": 0,
+              "relevance_score": 0.8571,
+              "latency_ms": 4768,
+              "hallucination": true,
+              "retrieval_hit": true,
+              "response_preview": "The GST rate applicable to export of goods from India is 15%.",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q25",
+              "question": "What is the income tax slab rate for individuals earning between 5 lakh and 10 lakh rupees per year in India?",
+              "correctness_score": 0,
+              "relevance_score": 0.9091,
+              "latency_ms": 5503,
+              "hallucination": true,
+              "retrieval_hit": false,
+              "response_preview": "The income tax slab rate for individuals earning between 5 lakh and 10 lakh rupees per year in India is 13%.",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            }
+          ]
+        },
+        "tinyllama:1.1b": {
+          "n": 2,
+          "avg_correctness": 0.5,
+          "avg_relevance": 0.838,
+          "avg_latency_ms": 5994.5,
+          "avg_llm_latency_ms": 5898.5,
+          "hallucination_count": 1,
+          "retrieval_hit_rate": 1.0,
+          "per_question": [
+            {
+              "question_id": "Q09",
+              "question": "What is the GST rate applicable to export of goods from India?",
+              "correctness_score": 1,
+              "relevance_score": 0.8571,
+              "latency_ms": 5770,
+              "hallucination": false,
+              "retrieval_hit": true,
+              "response_preview": "The GST rate applicable to export of goods from India is relevant date (a) in clause (b) or clause (c) and half per cent. Of the turnover in State or turnovers in Union territory, subject to such cond",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            },
+            {
+              "question_id": "Q25",
+              "question": "What is the income tax slab rate for individuals earning between 5 lakh and 10 lakh rupees per year in India?",
+              "correctness_score": 0,
+              "relevance_score": 0.8182,
+              "latency_ms": 6219,
+              "hallucination": true,
+              "retrieval_hit": false,
+              "response_preview": "The income tax slab rate for individuals earning between 5 lakhs and 10 lakhs rupees per year is 20% (or 10% if they are above the age of 60 years), as stated in Article 32(1) of the Constitution of I",
+              "retrieved_sources": [
+                "cgst_act.pdf",
+                "cgst_act.pdf",
+                "cgst_act.pdf"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "best_model_per_category": {
+    "Explanation": {
+      "correctness": "codellama:latest",
+      "latency": "tinyllama:1.1b",
+      "hallucination": "codellama:latest"
+    },
+    "Retrieval": {
+      "correctness": "qwen2.5:0.5b",
+      "latency": "qwen2.5:0.5b",
+      "hallucination": "codellama:latest"
+    },
+    "Dependency Understanding": {
+      "correctness": "tinyllama:1.1b",
+      "latency": "qwen2.5:0.5b",
+      "hallucination": "codellama:latest"
+    },
+    "Bug Analysis": {
+      "correctness": "qwen2.5:0.5b",
+      "latency": "qwen2.5:0.5b",
+      "hallucination": "codellama:latest"
+    },
+    "RAG-based Question": {
+      "correctness": "tinyllama:1.1b",
+      "latency": "qwen2.5:0.5b",
+      "hallucination": "codellama:latest"
+    },
+    "Hallucination Trap": {
+      "correctness": "tinyllama:1.1b",
+      "latency": "qwen2.5:0.5b",
+      "hallucination": "tinyllama:1.1b"
+    }
+  },
+  "category_wins": {
+    "codellama:latest": 1,
+    "qwen2.5:0.5b": 2,
+    "tinyllama:1.1b": 3
+  }
+}
