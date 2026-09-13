@@ -1,0 +1,359 @@
+{
+  "timestamp": "2026-09-13T17:42:40.360180+00:00",
+  "total_test_cases": 8,
+  "overall_passed": 3,
+  "overall_failed": 5,
+  "overall_pass_rate_pct": 37.5,
+  "condition_summary": {
+    "relevance": {
+      "pass": 6,
+      "fail": 2,
+      "pass_rate_pct": 75.0
+    },
+    "groundedness": {
+      "pass": 6,
+      "fail": 2,
+      "pass_rate_pct": 75.0
+    },
+    "unsupported_claims": {
+      "pass": 5,
+      "fail": 3,
+      "pass_rate_pct": 62.5
+    },
+    "format_compliance": {
+      "pass": 8,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    "answer_sufficiency": {
+      "pass": 8,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    "appropriate_refusal": {
+      "pass": 8,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    }
+  },
+  "results": [
+    {
+      "test_id": "TC_OUT_01",
+      "question": "What conditions must be satisfied to claim Input Tax Credit under Section 16 of CGST Act?",
+      "kb_supported": true,
+      "overall_status": "FAIL",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 0.375,
+          "reason": "Keyword relevance score: 0.38 (3/8 question terms matched)."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 0.6923,
+          "reason": "Groundedness score: 0.69 (9/13 terms supported by context)."
+        },
+        "unsupported_claims": {
+          "passed": false,
+          "claims_found": [
+            "Statutory reference 'Section 16'"
+          ],
+          "reason": "Detected 1 unsupported claims: Statutory reference 'Section 16'."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "PASS: Model successfully generated answer from available context."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "N/A: Question is supported by KB."
+        }
+      },
+      "name": "Relevance & Groundedness \u2014 CGST Input Tax Credit",
+      "answer": "Under Section 16 of CGST Act, Input Tax Credit is allowed subject to possession of tax invoice, receipt of goods, and tax payment to government.",
+      "context_length": 4504,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_02",
+      "question": "What is the employee contribution rate for provident fund under EPF Act?",
+      "kb_supported": true,
+      "overall_status": "FAIL",
+      "conditions": {
+        "relevance": {
+          "passed": false,
+          "score": 0.1667,
+          "reason": "Low relevance score: 0.17. Answer misses core question topics."
+        },
+        "groundedness": {
+          "passed": false,
+          "score": 0.0,
+          "reason": "Low groundedness: 0.00. Many answer terms absent from retrieved context."
+        },
+        "unsupported_claims": {
+          "passed": true,
+          "claims_found": [],
+          "reason": "No unsupported numerical or statutory claims detected."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "PASS: Model successfully generated answer from available context."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "N/A: Question is supported by KB."
+        }
+      },
+      "name": "Relevance & Groundedness \u2014 EPF Contribution Rate",
+      "answer": "The employer contribution to EPF is 12% of basic wages plus dearness allowance.",
+      "context_length": 4504,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_03",
+      "question": "What is the specific tax rate for cryptocurrency trading gains in Argentina for 2025?",
+      "kb_supported": false,
+      "overall_status": "PASS",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response appropriately addresses question by declaring information unavailable."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response is a controlled refusal statement."
+        },
+        "unsupported_claims": {
+          "passed": true,
+          "claims_found": [],
+          "reason": "No claims made (refusal response)."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "N/A: Question is not supported by KB."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "PASS: Model appropriately refused to answer out-of-scope or unavailable question."
+        }
+      },
+      "name": "Appropriate Refusal \u2014 Out of KB Question (Cryptocurrency Tax)",
+      "answer": "I could not find this information in the provided policy documents.",
+      "context_length": 0,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_04",
+      "question": "What is the customs duty rate on imported quantum processors under Section 999 of Indian Customs Tariff?",
+      "kb_supported": false,
+      "overall_status": "PASS",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response appropriately addresses question by declaring information unavailable."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response is a controlled refusal statement."
+        },
+        "unsupported_claims": {
+          "passed": true,
+          "claims_found": [],
+          "reason": "No claims made (refusal response)."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "N/A: Question is not supported by KB."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "PASS: Model appropriately refused to answer out-of-scope or unavailable question."
+        }
+      },
+      "name": "Appropriate Refusal \u2014 Hallucination Trap Question (Customs Duty)",
+      "answer": "I could not find this information in the provided policy documents.",
+      "context_length": 0,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_05",
+      "question": "How many weeks of paid maternity leave can a female employee claim for her first two children?",
+      "kb_supported": true,
+      "overall_status": "FAIL",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 0.5,
+          "reason": "Keyword relevance score: 0.50 (6/12 question terms matched)."
+        },
+        "groundedness": {
+          "passed": false,
+          "score": 0.1111,
+          "reason": "Low groundedness: 0.11. Many answer terms absent from retrieved context."
+        },
+        "unsupported_claims": {
+          "passed": true,
+          "claims_found": [],
+          "reason": "No unsupported numerical or statutory claims detected."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "PASS: Model successfully generated answer from available context."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "N/A: Question is supported by KB."
+        }
+      },
+      "name": "Relevance & Format \u2014 Maternity Leave Duration",
+      "answer": "The Maternity Benefit Act provides 26 weeks of paid maternity leave for female employees.",
+      "context_length": 4504,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_06",
+      "question": "What is the consignment value threshold requiring the generation of an e-way bill for movement of goods?",
+      "kb_supported": true,
+      "overall_status": "FAIL",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 0.6,
+          "reason": "Keyword relevance score: 0.60 (6/10 question terms matched)."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 0.9,
+          "reason": "Groundedness score: 0.90 (9/10 terms supported by context)."
+        },
+        "unsupported_claims": {
+          "passed": false,
+          "claims_found": [
+            "Monetary figure 'Rs. 50,000'"
+          ],
+          "reason": "Detected 1 unsupported claims: Monetary figure 'Rs. 50,000'."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "PASS: Model successfully generated answer from available context."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "N/A: Question is supported by KB."
+        }
+      },
+      "name": "Relevance & Claims Check \u2014 E-way Bill Threshold",
+      "answer": "An e-way bill is required for movement of goods of consignment value exceeding Rs. 50,000 under CGST rules.",
+      "context_length": 4504,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_07",
+      "question": "What are the corporate tax deductions for R&D expenditures in France under Code G\u00e9n\u00e9ral des Imp\u00f4ts?",
+      "kb_supported": false,
+      "overall_status": "PASS",
+      "conditions": {
+        "relevance": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response appropriately addresses question by declaring information unavailable."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 1.0,
+          "reason": "Response is a controlled refusal statement."
+        },
+        "unsupported_claims": {
+          "passed": true,
+          "claims_found": [],
+          "reason": "No claims made (refusal response)."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "N/A: Question is not supported by KB."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "PASS: Model appropriately refused to answer out-of-scope or unavailable question."
+        }
+      },
+      "name": "Appropriate Refusal \u2014 Off-topic French Tax Law",
+      "answer": "I could not find this information in the provided policy documents.",
+      "context_length": 0,
+      "retrieval_best_score": 1.0
+    },
+    {
+      "test_id": "TC_OUT_08",
+      "question": "How many years of continuous service are required to qualify for gratuity under the Payment of Gratuity Act?",
+      "kb_supported": true,
+      "overall_status": "FAIL",
+      "conditions": {
+        "relevance": {
+          "passed": false,
+          "score": 0.1111,
+          "reason": "Low relevance score: 0.11. Answer misses core question topics."
+        },
+        "groundedness": {
+          "passed": true,
+          "score": 0.6923,
+          "reason": "Groundedness score: 0.69 (9/13 terms supported by context)."
+        },
+        "unsupported_claims": {
+          "passed": false,
+          "claims_found": [
+            "Statutory reference 'Section 16'"
+          ],
+          "reason": "Detected 1 unsupported claims: Statutory reference 'Section 16'."
+        },
+        "format_compliance": {
+          "passed": true,
+          "reason": "PASS: Response complies with format, structure, and length boundaries."
+        },
+        "answer_sufficiency": {
+          "passed": true,
+          "reason": "PASS: Model successfully generated answer from available context."
+        },
+        "appropriate_refusal": {
+          "passed": true,
+          "reason": "N/A: Question is supported by KB."
+        }
+      },
+      "name": "Relevance & Groundedness \u2014 Gratuity Payment Criteria",
+      "answer": "Under Section 16 of CGST Act, Input Tax Credit is allowed subject to possession of tax invoice, receipt of goods, and tax payment to government.",
+      "context_length": 4504,
+      "retrieval_best_score": 1.0
+    }
+  ]
+}

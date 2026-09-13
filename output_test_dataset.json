@@ -1,0 +1,70 @@
+{
+  "description": "AI Output Systematic Testing Dataset for PolicyCheck AI",
+  "version": "1.0",
+  "test_cases": [
+    {
+      "id": "TC_OUT_01",
+      "name": "Relevance & Groundedness — CGST Input Tax Credit",
+      "question": "What conditions must be satisfied to claim Input Tax Credit under Section 16 of CGST Act?",
+      "kb_supported": true,
+      "expected_source": "cgst_act.pdf",
+      "expected_conditions": ["relevance", "groundedness", "unsupported_claims", "format_compliance", "answer_sufficiency"]
+    },
+    {
+      "id": "TC_OUT_02",
+      "name": "Relevance & Groundedness — EPF Contribution Rate",
+      "question": "What is the employee contribution rate for provident fund under EPF Act?",
+      "kb_supported": true,
+      "expected_source": "epf_act.pdf",
+      "expected_conditions": ["relevance", "groundedness", "unsupported_claims", "format_compliance", "answer_sufficiency"]
+    },
+    {
+      "id": "TC_OUT_03",
+      "name": "Appropriate Refusal — Out of KB Question (Cryptocurrency Tax)",
+      "question": "What is the specific tax rate for cryptocurrency trading gains in Argentina for 2025?",
+      "kb_supported": false,
+      "expected_source": "none",
+      "expected_conditions": ["relevance", "format_compliance", "appropriate_refusal"]
+    },
+    {
+      "id": "TC_OUT_04",
+      "name": "Appropriate Refusal — Hallucination Trap Question (Customs Duty)",
+      "question": "What is the customs duty rate on imported quantum processors under Section 999 of Indian Customs Tariff?",
+      "kb_supported": false,
+      "expected_source": "none",
+      "expected_conditions": ["relevance", "format_compliance", "appropriate_refusal"]
+    },
+    {
+      "id": "TC_OUT_05",
+      "name": "Relevance & Format — Maternity Leave Duration",
+      "question": "How many weeks of paid maternity leave can a female employee claim for her first two children?",
+      "kb_supported": true,
+      "expected_source": "maternity_benefit_act.pdf",
+      "expected_conditions": ["relevance", "groundedness", "unsupported_claims", "format_compliance", "answer_sufficiency"]
+    },
+    {
+      "id": "TC_OUT_06",
+      "name": "Relevance & Claims Check — E-way Bill Threshold",
+      "question": "What is the consignment value threshold requiring the generation of an e-way bill for movement of goods?",
+      "kb_supported": true,
+      "expected_source": "cgst_rules.pdf",
+      "expected_conditions": ["relevance", "groundedness", "unsupported_claims", "format_compliance", "answer_sufficiency"]
+    },
+    {
+      "id": "TC_OUT_07",
+      "name": "Appropriate Refusal — Off-topic French Tax Law",
+      "question": "What are the corporate tax deductions for R&D expenditures in France under Code Général des Impôts?",
+      "kb_supported": false,
+      "expected_source": "none",
+      "expected_conditions": ["relevance", "format_compliance", "appropriate_refusal"]
+    },
+    {
+      "id": "TC_OUT_08",
+      "name": "Relevance & Groundedness — Gratuity Payment Criteria",
+      "question": "How many years of continuous service are required to qualify for gratuity under the Payment of Gratuity Act?",
+      "kb_supported": true,
+      "expected_source": "gratuity_act.pdf",
+      "expected_conditions": ["relevance", "groundedness", "unsupported_claims", "format_compliance", "answer_sufficiency"]
+    }
+  ]
+}

@@ -376,6 +376,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Model Evaluation
     </button>
+    <button class="nav-btn" onclick="showTab('tab-guardrails',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      🛡️ Guardrails & Output Testing
+    </button>
   </div>
 
   <div class="container">
@@ -729,7 +733,148 @@
           </div>
         </div>
 
-        <button class="btn" onclick="checkStatus()" style="margin-top:10px">Refresh Status</button>
+          <button class="btn" onclick="checkStatus()" style="margin-top:10px">Refresh Status</button>
+      </div>
+    </div>
+
+    <!-- TAB 7: GUARDRAILS & AI OUTPUT TESTING -->
+    <div id="tab-guardrails" class="tab">
+      <div class="card">
+        <h2>🛡️ Application Guardrails & Controlled System Behavior</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
+          Identifies situations where PolicyCheck AI may produce undesirable, unsupported, or inappropriate responses and enforces strict real-time guardrails (Input Length, Scope Filter, Prompt Injection Prevention, Retrieval Relevance Gate, and Output Groundedness Verification).
+        </p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:10px">
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-indigo)">
+            <div style="font-weight:700;font-size:13px;color:var(--accent-indigo);margin-bottom:4px">1. Scope & Domain Filter</div>
+            <div style="font-size:12px;color:var(--text-sub)">Blocks questions outside Indian tax, policy, corporate, & labour law domain (e.g. coding, recipe, trivia).</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-blue)">
+            <div style="font-weight:700;font-size:13px;color:var(--accent-blue);margin-bottom:4px">2. Input Length & Safety</div>
+            <div style="font-size:12px;color:var(--text-sub)">Restricts prompts >1000 chars or >200 words and neutralizes prompt injection / system leak attempts.</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid #f59e0b">
+            <div style="font-weight:700;font-size:13px;color:#d97706;margin-bottom:4px">3. Retrieval Relevance Gate</div>
+            <div style="font-size:12px;color:var(--text-sub)">Prevents LLM from answering when retrieved context score &lt; 0.50 threshold (declines safely).</div>
+          </div>
+          <div style="background:var(--bg-input);padding:14px;border-radius:10px;border-left:4px solid var(--accent-emerald)">
+            <div style="font-weight:700;font-size:13px;color:var(--accent-emerald);margin-bottom:4px">4. Output Groundedness</div>
+            <div style="font-size:12px;color:var(--text-sub)">Scans generated answer for unsupported percentages, tax rates, or section numbers not in context.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section A: Side-by-Side Guardrail Demonstration -->
+      <div class="card">
+        <h2>Demonstration: Without Guardrail vs. With Guardrail</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Select a sample scenario to observe how un-guardrailed execution produces problematic/undesirable behavior, whereas guardrailed execution enforces controlled behavior.
+        </p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <button class="btn" onclick="runGuardrailDemo('out_of_scope')" style="background:#4f46e5;font-size:12px;padding:8px 16px">
+            🚫 Out-of-Scope (Python Code)
+          </button>
+          <button class="btn" onclick="runGuardrailDemo('input_too_long')" style="background:#2563eb;font-size:12px;padding:8px 16px">
+            📏 Excessively Long Input (Spam)
+          </button>
+          <button class="btn" onclick="runGuardrailDemo('insufficient_info')" style="background:#d97706;font-size:12px;padding:8px 16px">
+            🔍 Insufficient Info (Foreign Tax)
+          </button>
+          <button class="btn" onclick="runGuardrailDemo('prompt_injection')" style="background:#dc2626;font-size:12px;padding:8px 16px">
+            🛡️ Prompt Injection Attempt
+          </button>
+        </div>
+
+        <div id="demo-comparison-area" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:18px">
+            <div style="font-weight:800;font-size:14px;color:#991b1b;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+              <span>⚠️ Without Guardrail</span>
+              <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:12px">Problematic / Undesirable</span>
+            </div>
+            <div id="demo-without-output" style="font-size:13px;color:#7f1d1d;line-height:1.6">
+              Click a scenario button above to run side-by-side demonstration...
+            </div>
+          </div>
+
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:18px">
+            <div style="font-weight:800;font-size:14px;color:#166534;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+              <span>🛡️ With Guardrail</span>
+              <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:12px">Controlled / Safe</span>
+            </div>
+            <div id="demo-with-output" style="font-size:13px;color:#14532d;line-height:1.6">
+              Click a scenario button above to run side-by-side demonstration...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section B: Live Guardrail Sandbox -->
+      <div class="card">
+        <h2>Live Guardrail Sandbox</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">
+          Test any prompt live. Toggle guardrails ON or OFF to see step-by-step validation trace.
+        </p>
+
+        <div style="margin-bottom:14px;display:flex;align-items:center;gap:16px">
+          <label style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="sandbox-guardrails-toggle" checked style="width:18px;height:18px;accent-color:var(--accent-indigo)">
+            <span>Enable Guardrails</span>
+          </label>
+        </div>
+
+        <textarea id="sandbox-q" rows="3" placeholder="Type any question or prompt here (e.g. 'Write a poem', 'What is CGST Section 16?', or 1000+ char prompt)..."></textarea>
+
+        <div style="margin-top:12px;display:flex;gap:12px">
+          <button class="btn" onclick="doSandboxAsk()" style="font-size:13px">Evaluate Query</button>
+        </div>
+
+        <div id="sandbox-result-area" style="margin-top:18px"></div>
+      </div>
+
+      <!-- Section C: Guardrail Effectiveness Benchmark -->
+      <div class="card">
+        <h2>Guardrail Effectiveness Evaluation Benchmark</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Quantitative measurement of guardrail performance across 25 benchmark test cases comparing <strong>Without Guardrail</strong> vs <strong>With Guardrail</strong> execution.
+        </p>
+
+        <div id="guardrail-metrics-grid" class="stat-grid">
+          <div class="stat-card"><div class="stat-val" id="gm-accuracy">--</div><div class="stat-lbl">Accuracy</div></div>
+          <div class="stat-card"><div class="stat-val" id="gm-precision">--</div><div class="stat-lbl">Precision</div></div>
+          <div class="stat-card"><div class="stat-val" id="gm-recall">--</div><div class="stat-lbl">Recall</div></div>
+          <div class="stat-card"><div class="stat-val" id="gm-f1">--</div><div class="stat-lbl">F1 Score</div></div>
+          <div class="stat-card"><div class="stat-val" id="gm-block-with">--</div><div class="stat-lbl">Block Rate (With)</div></div>
+          <div class="stat-card"><div class="stat-val" id="gm-block-without">--</div><div class="stat-lbl">Block Rate (Without)</div></div>
+        </div>
+
+        <div id="guardrail-benchmark-table" style="overflow-x:auto;margin-top:16px"></div>
+      </div>
+
+      <!-- Section D: AI Output Systematic Testing -->
+      <div class="card">
+        <h2>AI Output Systematic Testing Matrix</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Treats LLM output as data that must be systematically tested against 6 defined pass/fail conditions before acceptance.
+        </p>
+
+        <div id="output-test-summary-grid" class="stat-grid">
+          <div class="stat-card"><div class="stat-val" id="ot-total">--</div><div class="stat-lbl">Total Test Cases</div></div>
+          <div class="stat-card"><div class="stat-val" id="ot-pass-rate">--</div><div class="stat-lbl">Overall Pass Rate</div></div>
+          <div class="stat-card"><div class="stat-val" id="ot-rel-pass">--</div><div class="stat-lbl">Relevance Pass</div></div>
+          <div class="stat-card"><div class="stat-val" id="ot-ground-pass">--</div><div class="stat-lbl">Groundedness Pass</div></div>
+          <div class="stat-card"><div class="stat-val" id="ot-claims-pass">--</div><div class="stat-lbl">No Claims Pass</div></div>
+          <div class="stat-card"><div class="stat-val" id="ot-refusal-pass">--</div><div class="stat-lbl">Refusal Pass</div></div>
+        </div>
+
+        <div style="margin-top:14px;margin-bottom:14px">
+          <button class="btn" onclick="runOutputTestsNow()" style="background:var(--accent-indigo);font-size:12px;padding:8px 18px">
+            🔄 Re-Run AI Output Test Suite
+          </button>
+        </div>
+
+        <div id="output-test-matrix-table" style="overflow-x:auto"></div>
       </div>
     </div>
 
@@ -1299,15 +1444,227 @@ function renderWeek4ResultsTable(results, questions) {
   document.getElementById('week4-results-table').appendChild(table);
 }
 
-// Load Week 4 results when tab is shown
+// Load Week 4 & Guardrail results when tab is shown
 const originalShowTab = window.showTab || function() {};
 window.showTab = function(id, btn) {
   originalShowTab(id, btn);
   if (id === 'tab-week4') {
     loadWeek4Results();
   }
+  if (id === 'tab-guardrails') {
+    loadGuardrailMetrics();
+    loadOutputTestResults();
+  }
 };
 
+// ── Guardrails & Output Testing Functions ────────────────────────────────────
+async function runGuardrailDemo(scenario) {
+  const withoutEl = document.getElementById('demo-without-output');
+  const withEl = document.getElementById('demo-with-output');
+
+  withoutEl.innerHTML = '<div style="color:var(--accent-blue)">Processing without guardrail...</div>';
+  withEl.innerHTML = '<div style="color:var(--accent-blue)">Evaluating guardrails...</div>';
+
+  try {
+    const res = await fetch('/api/guardrails/demo?scenario=' + encodeURIComponent(scenario), { method: 'POST' });
+    const data = await res.json();
+
+    const wOut = data.without_guardrail;
+    const wWith = data.with_guardrail;
+
+    withoutEl.innerHTML = `
+      <div style="font-weight:700;margin-bottom:6px">Prompt: "${esc(data.question.substring(0, 100))}${data.question.length > 100 ? '...' : ''}"</div>
+      <div style="margin-bottom:8px"><strong>Status:</strong> <span style="color:#dc2626;font-weight:700">UNFILTERED (ALLOWED)</span></div>
+      <div style="background:#fff;padding:10px;border-radius:6px;border:1px solid #fca5a5;margin-top:6px">
+        <strong>Generated Response:</strong><br>
+        ${esc(wOut.answer)}
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#991b1b">
+        ⚠️ <strong>Problem:</strong> System attempted to answer off-topic, ungrounded, or unsafe prompt without restriction. Wasted compute & risked hallucination.
+      </div>
+    `;
+
+    withEl.innerHTML = `
+      <div style="font-weight:700;margin-bottom:6px">Prompt: "${esc(data.question.substring(0, 100))}${data.question.length > 100 ? '...' : ''}"</div>
+      <div style="margin-bottom:8px">
+        <strong>Status:</strong> <span style="background:#bbf7d0;color:#166534;font-weight:700;padding:2px 8px;border-radius:4px">${esc(wWith.guardrail_status)}</span>
+        ${wWith.guardrail_name !== 'NONE' ? `<span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 6px;border-radius:4px;margin-left:6px">${esc(wWith.guardrail_name)}</span>` : ''}
+      </div>
+      <div style="background:#fff;padding:10px;border-radius:6px;border:1px solid #86efac;margin-top:6px">
+        <strong>Controlled Output:</strong><br>
+        ${esc(wWith.answer)}
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#166534">
+        ✅ <strong>Controlled Behavior:</strong> ${esc(wWith.reason)}
+      </div>
+    `;
+  } catch (err) {
+    withoutEl.innerHTML = '<div style="color:red">Error: ' + esc(err.message) + '</div>';
+    withEl.innerHTML = '<div style="color:red">Error: ' + esc(err.message) + '</div>';
+  }
+}
+
+async function doSandboxAsk() {
+  const q = document.getElementById('sandbox-q').value.trim();
+  const enabled = document.getElementById('sandbox-guardrails-toggle').checked;
+  const resEl = document.getElementById('sandbox-result-area');
+
+  if (!q) return;
+
+  resEl.innerHTML = '<div style="color:var(--accent-blue)">Running guardrail evaluation...</div>';
+
+  try {
+    const url = `/api/guardrails/ask?question=${encodeURIComponent(q)}&enable_guardrails=${enabled}&model=${encodeURIComponent(getModel())}`;
+    const resp = await fetch(url, { method: 'POST' });
+    const data = await resp.json();
+
+    const isBlocked = data.guardrail_status !== 'ALLOWED';
+
+    resEl.innerHTML = `
+      <div style="background:${isBlocked ? '#fef2f2' : '#f0fdf4'};border:1px solid ${isBlocked ? '#fca5a5' : '#86efac'};border-radius:12px;padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-weight:800;font-size:15px;color:${isBlocked ? '#991b1b' : '#166534'}">
+            ${isBlocked ? '🛑 GUARDRAIL ACTION: BLOCKED / SANITIZED' : '✅ GUARDRAIL ACTION: PASSED & ALLOWED'}
+          </div>
+          <span style="font-size:12px;font-weight:700;background:${isBlocked ? '#fee2e2' : '#dcfce7'};color:${isBlocked ? '#991b1b' : '#166534'};padding:4px 12px;border-radius:12px">
+            ${esc(data.guardrail_status)} Stage: ${esc(data.blocked_stage || 'NONE')}
+          </span>
+        </div>
+
+        <div style="font-size:13px;margin-bottom:8px"><strong>Reason:</strong> ${esc(data.reason)}</div>
+        <div style="font-size:13px;margin-bottom:12px"><strong>Best KB Similarity Score:</strong> <code>${data.best_score}</code> (Threshold: 0.50)</div>
+
+        <div style="background:#ffffff;border:1px solid var(--border-color);border-radius:8px;padding:14px;font-size:13px;line-height:1.6">
+          <strong>Final System Output:</strong><br>
+          <div style="margin-top:6px">${renderMarkdown(data.answer)}</div>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    resEl.innerHTML = '<div style="color:red">Error: ' + esc(err.message) + '</div>';
+  }
+}
+
+async function loadGuardrailMetrics() {
+  try {
+    const res = await fetch('/api/guardrails/eval-results');
+    const data = await res.json();
+
+    const m = data.metrics;
+    document.getElementById('gm-accuracy').textContent = m.accuracy_pct + '%';
+    document.getElementById('gm-precision').textContent = m.precision;
+    document.getElementById('gm-recall').textContent = m.recall;
+    document.getElementById('gm-f1').textContent = m.f1_score;
+    document.getElementById('gm-block-with').textContent = m.block_rate_with_guardrail_pct + '%';
+    document.getElementById('gm-block-without').textContent = m.block_rate_without_guardrail_pct + '%';
+
+    const tableEl = document.getElementById('guardrail-benchmark-table');
+    tableEl.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Prompt</th>
+            <th>Expected</th>
+            <th>Without Guardrail</th>
+            <th>With Guardrail</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.results.map(r => `
+            <tr style="font-size:12px">
+              <td><strong>${esc(r.id)}</strong></td>
+              <td><span style="background:var(--bg-input);padding:2px 6px;border-radius:4px">${esc(r.category)}</span></td>
+              <td title="${esc(r.prompt)}">${esc(r.prompt.substring(0, 45))}...</td>
+              <td><strong>${esc(r.expected_action)}</strong></td>
+              <td><span style="color:#dc2626">${esc(r.without_guardrail.status)}</span></td>
+              <td><span style="color:${r.with_guardrail.status === 'ALLOWED' ? '#059669' : '#dc2626'};font-weight:700">${esc(r.with_guardrail.status)}</span></td>
+              <td>${r.with_guardrail.is_controlled ? '✅ Controlled' : '❌ Failed'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    console.error('Error loading guardrail eval results:', err);
+  }
+}
+
+async function loadOutputTestResults() {
+  try {
+    const res = await fetch('/api/output-tests/results');
+    const data = await res.json();
+
+    document.getElementById('ot-total').textContent = data.total_test_cases;
+    document.getElementById('ot-pass-rate').textContent = data.overall_pass_rate_pct + '%';
+
+    const cs = data.condition_summary;
+    document.getElementById('ot-rel-pass').textContent = cs.relevance ? cs.relevance.pass_rate_pct + '%' : '--';
+    document.getElementById('ot-ground-pass').textContent = cs.groundedness ? cs.groundedness.pass_rate_pct + '%' : '--';
+    document.getElementById('ot-claims-pass').textContent = cs.unsupported_claims ? cs.unsupported_claims.pass_rate_pct + '%' : '--';
+    document.getElementById('ot-refusal-pass').textContent = cs.appropriate_refusal ? cs.appropriate_refusal.pass_rate_pct + '%' : '--';
+
+    const tableEl = document.getElementById('output-test-matrix-table');
+    tableEl.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Test ID</th>
+            <th>Question Name</th>
+            <th>KB Supported</th>
+            <th>Relevance</th>
+            <th>Groundedness</th>
+            <th>No Claims</th>
+            <th>Format</th>
+            <th>Sufficiency</th>
+            <th>Refusal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.results.map(r => `
+            <tr style="font-size:12px">
+              <td><strong>${esc(r.test_id)}</strong></td>
+              <td>${esc(r.name || r.question.substring(0, 35))}</td>
+              <td>${r.kb_supported ? 'Yes' : 'No (Trap)'}</td>
+              <td>${r.conditions.relevance.passed ? '✓' : '✗'}</td>
+              <td>${r.conditions.groundedness.passed ? '✓' : '✗'}</td>
+              <td>${r.conditions.unsupported_claims.passed ? '✓' : '✗'}</td>
+              <td>${r.conditions.format_compliance.passed ? '✓' : '✗'}</td>
+              <td>${r.conditions.answer_sufficiency.passed ? '✓' : 'N/A'}</td>
+              <td>${r.conditions.appropriate_refusal.passed ? '✓' : 'N/A'}</td>
+              <td>
+                <span style="background:${r.overall_status === 'PASS' ? '#dcfce7' : '#fee2e2'};color:${r.overall_status === 'PASS' ? '#166534' : '#991b1b'};font-weight:700;padding:2px 8px;border-radius:10px">
+                  ${esc(r.overall_status)}
+                </span>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    console.error('Error loading output test results:', err);
+  }
+}
+
+async function runOutputTestsNow() {
+  const summaryEl = document.getElementById('output-test-summary-grid');
+  summaryEl.insertAdjacentHTML('beforebegin', '<div id="ot-running-msg" style="color:var(--accent-blue);font-weight:700;margin-bottom:10px">Executing systematic AI output test suite...</div>');
+
+  try {
+    const res = await fetch('/api/output-tests/run', { method: 'POST' });
+    const data = await res.json();
+    const msg = document.getElementById('ot-running-msg');
+    if (msg) msg.remove();
+    loadOutputTestResults();
+  } catch (err) {
+    alert('Failed to run output tests: ' + err.message);
+  }
+}
 </script>
 </body>
 </html>
+
