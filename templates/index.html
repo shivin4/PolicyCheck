@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -607,6 +608,23 @@
       </div>
 
       <div class="card">
+        <h2>📊 Visual Model Evaluation Comparison</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Graphical analysis of model performance metrics, latency benchmarks, and quality trade-offs across CodeLlama, Qwen 2.5, and TinyLLaMA.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px">
+          <div style="background:var(--bg-input);padding:18px;border-radius:12px;border:1px solid var(--border-color)">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent-indigo)">Model Performance & Quality Scores</h4>
+            <div style="height:260px;position:relative"><canvas id="eval-model-chart"></canvas></div>
+          </div>
+          <div style="background:var(--bg-input);padding:18px;border-radius:12px;border:1px solid var(--border-color)">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent-blue)">Response Latency Comparison (ms)</h4>
+            <div style="height:260px;position:relative"><canvas id="eval-latency-chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
         <h2>Category-wise Model Comparison</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
           Same 25 questions evaluated across all 3 models, broken down by task type. Shows which model performs best for each category of task.
@@ -850,6 +868,24 @@
         </div>
 
         <div id="guardrail-benchmark-table" style="overflow-x:auto;margin-top:16px"></div>
+      </div>
+
+      <!-- Section Visual Charts -->
+      <div class="card">
+        <h2>📊 Visual Guardrail Effectiveness & Output Testing Metrics</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+          Graphical analysis of guardrail block rates, classification metrics (Precision, Recall, F1), and AI output test pass rates across 6 compliance criteria.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px">
+          <div style="background:var(--bg-input);padding:18px;border-radius:12px;border:1px solid var(--border-color)">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent-indigo)">Guardrail Performance Metrics (%)</h4>
+            <div style="height:260px;position:relative"><canvas id="guardrail-metrics-chart"></canvas></div>
+          </div>
+          <div style="background:var(--bg-input);padding:18px;border-radius:12px;border:1px solid var(--border-color)">
+            <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent-emerald)">AI Output Testing Condition Pass Rates (%)</h4>
+            <div style="height:260px;position:relative"><canvas id="output-testing-chart"></canvas></div>
+          </div>
+        </div>
       </div>
 
       <!-- Section D: AI Output Systematic Testing -->
@@ -1201,6 +1237,7 @@ async function loadWeek4Results() {
 
     // Overall summary cards
     renderWeek4Summary(data.summary);
+    renderWeek4Charts(data.summary);
 
     // Category-wise comparison table
     if (data.category_analysis) {
@@ -1558,6 +1595,8 @@ async function loadGuardrailMetrics() {
     document.getElementById('gm-block-with').textContent = m.block_rate_with_guardrail_pct + '%';
     document.getElementById('gm-block-without').textContent = m.block_rate_without_guardrail_pct + '%';
 
+    renderGuardrailChart(m);
+
     const tableEl = document.getElementById('guardrail-benchmark-table');
     tableEl.innerHTML = `
       <table>
@@ -1645,6 +1684,7 @@ async function loadOutputTestResults() {
         </tbody>
       </table>
     `;
+    renderOutputTestingChart(cs);
   } catch (err) {
     console.error('Error loading output test results:', err);
   }
@@ -1663,6 +1703,154 @@ async function runOutputTestsNow() {
   } catch (err) {
     alert('Failed to run output tests: ' + err.message);
   }
+}
+
+// ── Chart.js Visualization Renderers ─────────────────────────────────────────
+let evalModelChartInst = null;
+let evalLatencyChartInst = null;
+let guardrailMetricsChartInst = null;
+let outputTestingChartInst = null;
+
+function renderWeek4Charts(summary) {
+  if (!window.Chart || !summary) return;
+  const models = Object.keys(summary);
+  const labels = models.map(m => {
+    if (m.includes('codellama')) return 'CodeLlama (7B)';
+    if (m.includes('qwen')) return 'Qwen 2.5 (0.5B)';
+    if (m.includes('tinyllama')) return 'TinyLLaMA (1.1B)';
+    return m;
+  });
+
+  const correctness = models.map(m => (summary[m].avg_correctness / 2.0 * 100).toFixed(1));
+  const relevance = models.map(m => (summary[m].avg_relevance * 100).toFixed(1));
+  const hallucinations = models.map(m => summary[m].hallucination_count);
+
+  const totalLatency = models.map(m => (summary[m].avg_latency / 1000).toFixed(2));
+  const llmLatency = models.map(m => (summary[m].avg_llm_latency / 1000).toFixed(2));
+
+  // Chart 1: Quality Scores
+  const ctx1 = document.getElementById('eval-model-chart');
+  if (ctx1) {
+    if (evalModelChartInst) evalModelChartInst.destroy();
+    evalModelChartInst = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Correctness Rate (%)', data: correctness, backgroundColor: 'rgba(79, 70, 229, 0.85)', borderRadius: 6 },
+          { label: 'Relevance Score (%)', data: relevance, backgroundColor: 'rgba(37, 99, 235, 0.85)', borderRadius: 6 },
+          { label: 'Hallucination Count', data: hallucinations, backgroundColor: 'rgba(220, 38, 38, 0.85)', borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // Chart 2: Latency Benchmark
+  const ctx2 = document.getElementById('eval-latency-chart');
+  if (ctx2) {
+    if (evalLatencyChartInst) evalLatencyChartInst.destroy();
+    evalLatencyChartInst = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Total Latency (sec)', data: totalLatency, backgroundColor: 'rgba(245, 158, 11, 0.85)', borderRadius: 6 },
+          { label: 'LLM Latency (sec)', data: llmLatency, backgroundColor: 'rgba(6, 182, 212, 0.85)', borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, title: { display: true, text: 'Seconds' } } }
+      }
+    });
+  }
+}
+
+function renderGuardrailChart(metrics) {
+  if (!window.Chart || !metrics) return;
+  const ctx = document.getElementById('guardrail-metrics-chart');
+  if (!ctx) return;
+
+  if (guardrailMetricsChartInst) guardrailMetricsChartInst.destroy();
+
+  guardrailMetricsChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Accuracy', 'Precision', 'Recall', 'F1 Score', 'Block (With)', 'Block (Without)'],
+      datasets: [{
+        label: 'Metric Value (%)',
+        data: [
+          metrics.accuracy_pct,
+          (metrics.precision * 100).toFixed(1),
+          (metrics.recall * 100).toFixed(1),
+          (metrics.f1_score * 100).toFixed(1),
+          metrics.block_rate_with_guardrail_pct,
+          metrics.block_rate_without_guardrail_pct
+        ],
+        backgroundColor: [
+          'rgba(79, 70, 229, 0.85)',
+          'rgba(37, 99, 235, 0.85)',
+          'rgba(5, 150, 105, 0.85)',
+          'rgba(139, 92, 246, 0.85)',
+          'rgba(220, 38, 38, 0.85)',
+          'rgba(148, 163, 184, 0.85)'
+        ],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Percentage (%)' } } }
+    }
+  });
+}
+
+function renderOutputTestingChart(cs) {
+  if (!window.Chart || !cs) return;
+  const ctx = document.getElementById('output-testing-chart');
+  if (!ctx) return;
+
+  if (outputTestingChartInst) outputTestingChartInst.destroy();
+
+  const labels = ['Relevance', 'Groundedness', 'No Claims', 'Format', 'Sufficiency', 'Refusal'];
+  const passRates = [
+    cs.relevance ? cs.relevance.pass_rate_pct : 100,
+    cs.groundedness ? cs.groundedness.pass_rate_pct : 100,
+    cs.unsupported_claims ? cs.unsupported_claims.pass_rate_pct : 100,
+    cs.format_compliance ? cs.format_compliance.pass_rate_pct : 100,
+    cs.answer_sufficiency ? cs.answer_sufficiency.pass_rate_pct : 100,
+    cs.appropriate_refusal ? cs.appropriate_refusal.pass_rate_pct : 100
+  ];
+
+  outputTestingChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Condition Pass Rate (%)',
+        data: passRates,
+        backgroundColor: 'rgba(5, 150, 105, 0.85)',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, max: 100, title: { display: true, text: 'Pass Rate (%)' } } }
+    }
+  });
 }
 </script>
 </body>
