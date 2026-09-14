@@ -16,7 +16,6 @@ def evaluate_relevance(question: str, answer: str) -> Tuple[bool, float, str]:
     if not answer or not answer.strip():
         return False, 0.0, "Answer is empty."
 
-    # Extract non-stopword tokens from question
     stop = {"what", "is", "the", "for", "how", "can", "are", "under", "which", "when", "who", "does", "policy", "check", "with", "from", "have", "been"}
     q_words = set(w.lower() for w in re.findall(r"[a-z]{3,}", question) if w.lower() not in stop)
     
@@ -27,7 +26,6 @@ def evaluate_relevance(question: str, answer: str) -> Tuple[bool, float, str]:
     matched = set(w for w in q_words if w in ans_lower)
     score = round(len(matched) / len(q_words), 4)
 
-    # Refusal responses are considered topically relevant if they acknowledge the question
     if any(phrase in ans_lower for phrase in ["not found", "could not find", "not available", "no information"]):
         return True, 1.0, "Response appropriately addresses question by declaring information unavailable."
 
@@ -45,7 +43,6 @@ def evaluate_groundedness(context: str, answer: str) -> Tuple[bool, float, str]:
         return False, 0.0, "Answer is empty."
 
     ans_lower = answer.lower()
-    # Refusal responses are grounded by definition
     if any(phrase in ans_lower for phrase in ["not found", "could not find", "not available", "no information", "outside"]):
         return True, 1.0, "Response is a controlled refusal statement."
 
@@ -81,23 +78,24 @@ def evaluate_unsupported_claims(context: str, answer: str) -> Tuple[bool, List[s
     ctx_lower = context.lower() if context else ""
     unsupported = []
 
-    # Check percentages (e.g. 18%, 28%)
+    # 1. Check percentages (e.g. 18%, 28%)
     pcts = re.findall(r"\b\d+(?:\.\d+)?\s*%\b", answer)
     for pct in pcts:
         if pct.replace(" ", "").lower() not in ctx_lower.replace(" ", ""):
             unsupported.append(f"Percentage '{pct}'")
 
-    # Check sections (e.g. Section 16, Section 54)
-    sections = re.findall(r"\bSection\s+\d+\b", answer, re.IGNORECASE)
-    for sec in sections:
-        if sec.lower() not in ctx_lower:
-            unsupported.append(f"Statutory reference '{sec}'")
+    # 2. Check statutory section numbers (e.g. Section 16, Section 66A)
+    sections = re.findall(r"\bSection\s+(\d+[A-Z]?(?:\(\d+\))?)\b", answer, re.IGNORECASE)
+    for sec_num in sections:
+        sec_clean = sec_num.lower()
+        if sec_clean not in ctx_lower and f"section {sec_clean}" not in ctx_lower and f"sec {sec_clean}" not in ctx_lower:
+            unsupported.append(f"Statutory reference 'Section {sec_num}'")
 
-    # Check monetary figures (e.g. Rs. 20,000, 10 lakh)
-    amounts = re.findall(r"\b(?:rs\.?|inr)?\s*\d{1,3}(?:,\d{2,3})*(?:\s*lakh|\s*crore)?\b", answer, re.IGNORECASE)
+    # 3. Check explicit monetary figures (e.g. Rs. 20,000, 10 lakh)
+    amounts = re.findall(r"\b(?:rs\.?|inr)\s*\d+(?:,\d+)*(?:\s*lakh|\s*crore)?\b|\b\d{1,3}(?:,\d{3})+(?:\s*lakh|\s*crore)?\b", answer, re.IGNORECASE)
     for amt in amounts:
         amt_clean = amt.strip().lower()
-        if len(amt_clean) > 2 and amt_clean not in ctx_lower and not re.match(r"^\d$", amt_clean):
+        if len(amt_clean) > 2 and amt_clean not in ctx_lower:
             unsupported.append(f"Monetary figure '{amt}'")
 
     passed = len(unsupported) == 0
@@ -116,7 +114,6 @@ def evaluate_format_compliance(answer: str, max_chars: int = 4000) -> Tuple[bool
     if len(answer) > max_chars:
         return False, f"FAIL: Output exceeds max length ({len(answer)} > {max_chars} chars)."
 
-    # Prompt leakage check
     leak_triggers = ["You are PolicyCheck AI", "Answer the user's question using ONLY", "Context:"]
     for trigger in leak_triggers:
         if trigger in answer and len(answer) < 150:
@@ -159,7 +156,6 @@ def evaluate_appropriate_refusal(kb_supported: bool, answer: str) -> Tuple[bool,
     ]
 
     has_refusal = any(phrase in ans_lower for phrase in refusal_phrases)
-    # Check if model hallucinated specific rates or facts
     has_hallucinated_number = bool(re.search(r"\b(5|12|18|28)\s*%\b", ans_lower))
 
     if has_refusal and not has_hallucinated_number:

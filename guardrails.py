@@ -20,7 +20,8 @@ IN_SCOPE_KEYWORDS = {
     "assessment", "tds", "tcs", "deduction", "assessment", "company", "director", "board",
     "share", "pf", "epf", "gratuity", "esi", "labour", "wages", "minimum wage", "leave",
     "maternity", "factories", "bonus", "fdi", "export", "import", "sez", "rbi", "sebi",
-    "corporate", "governance", "notice", "appeal", "tribunal", "rule", "circular", "notification"
+    "corporate", "governance", "notice", "appeal", "tribunal", "rule", "circular", "notification",
+    "technology", "information technology", "cyber", "computer", "fraud", "hacker", "access"
 }
 
 # Distinct patterns indicating off-topic / out-of-scope requests
@@ -78,13 +79,11 @@ class InputGuardrail:
 
         # Check domain relevance (if query has > 4 words, expect at least some policy relevance or general policy question wording)
         words = set(re.findall(r"[a-z]{3,}", q_lower))
-        stop_words = {"what", "is", "the", "for", "how", "can", "are", "under", "which", "when", "who", "does", "policy", "check"}
+        stop_words = {"what", "is", "the", "for", "how", "can", "are", "under", "which", "when", "who", "does", "policy", "check", "apply", "these", "actions", "each"}
         content_words = words - stop_words
         
-        # If it's a specific question and contains zero policy domain keywords while matching general non-policy subjects
         if len(content_words) >= 3 and not any(kw in q_lower for kw in IN_SCOPE_KEYWORDS):
-            # Check if query is clearly general non-policy topic
-            non_policy_topics = ["weather", "recipe", "python", "code", "movie", "football", "planet", "solar system", "physics", "chemistry", "biology", "history ofrome"]
+            non_policy_topics = ["weather", "recipe", "python", "code", "movie", "football", "planet", "solar system", "physics", "chemistry", "biology"]
             if any(tp in q_lower for tp in non_policy_topics):
                 return False, "OUT_OF_SCOPE: Topic is unrelated to corporate, tax, or regulatory policy."
 
@@ -144,24 +143,24 @@ class OutputGuardrail:
         # 1. Extract percentages (e.g., 18%, 28%, 5%)
         percentages = re.findall(r"\b\d+(?:\.\d+)?\s*%\b", answer)
         for pct in percentages:
-            normalized_pct = pct.replace(" ", "")
-            if normalized_pct.lower() not in ctx_lower.replace(" ", ""):
+            normalized_pct = pct.replace(" ", "").lower()
+            if normalized_pct not in ctx_lower.replace(" ", ""):
                 unsupported_claims.append(f"Percentage rate '{pct}' not found in retrieved context.")
 
-        # 2. Extract section numbers (e.g., Section 16, Section 54(3))
-        sections = re.findall(r"\bSection\s+\d+(?:\(\d+\))?\b", answer, re.IGNORECASE)
-        for sec in sections:
-            if sec.lower() not in ctx_lower:
-                unsupported_claims.append(f"Statutory reference '{sec}' not mentioned in retrieved context.")
+        # 2. Extract statutory section numbers (e.g., Section 16, Section 66A, Section 43)
+        sections = re.findall(r"\bSection\s+(\d+[A-Z]?(?:\(\d+\))?)\b", answer, re.IGNORECASE)
+        for sec_num in sections:
+            sec_clean = sec_num.lower()
+            if sec_clean not in ctx_lower and f"section {sec_clean}" not in ctx_lower and f"sec {sec_clean}" not in ctx_lower:
+                unsupported_claims.append(f"Statutory reference 'Section {sec_num}' not mentioned in retrieved context.")
 
-        # 3. Extract monetary figures (e.g., 10 lakh, 50,000, Rs. 20,000)
-        amounts = re.findall(r"\b(?:rs\.?|inr)?\s*\d{1,3}(?:,\d{2,3})*(?:\s*lakh|\s*crore)?\b", answer, re.IGNORECASE)
+        # 3. Extract explicit monetary figures (e.g., Rs. 20,000, 10 lakh, INR 50,000)
+        # Avoid matching 4-digit years like 2000, 2013, 2024
+        amounts = re.findall(r"\b(?:rs\.?|inr)\s*\d+(?:,\d+)*(?:\s*lakh|\s*crore)?\b|\b\d{1,3}(?:,\d{3})+(?:\s*lakh|\s*crore)?\b", answer, re.IGNORECASE)
         for amt in amounts:
             amt_clean = amt.strip().lower()
             if len(amt_clean) > 2 and amt_clean not in ctx_lower:
-                # Exclude trivial single digit numbers
-                if not re.match(r"^\d$", amt_clean):
-                    unsupported_claims.append(f"Monetary figure '{amt}' not present in context.")
+                unsupported_claims.append(f"Monetary figure '{amt}' not present in context.")
 
         if unsupported_claims:
             return False, f"UNSUPPORTED_CLAIMS: Generated answer contains {len(unsupported_claims)} claims/figures unsupported by context.", unsupported_claims
