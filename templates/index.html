@@ -924,6 +924,8 @@ function showTab(id, btn) {
   if (btn) btn.classList.add('active');
   if (id === 'tab-kb') loadKB();
   if (id === 'tab-status') checkStatus();
+  if (id === 'tab-week4') setTimeout(loadWeek4Results, 50);
+  if (id === 'tab-guardrails') { setTimeout(loadGuardrailMetrics, 50); setTimeout(loadOutputTestResults, 50); }
 }
 
 function getModel() {
@@ -1222,6 +1224,9 @@ async function checkStatus() {
 
 window.onload = function() {
   checkStatus();
+  loadWeek4Results();
+  loadGuardrailMetrics();
+  loadOutputTestResults();
 };
 
 // Week 4 Evaluation Functions
@@ -1481,18 +1486,7 @@ function renderWeek4ResultsTable(results, questions) {
   document.getElementById('week4-results-table').appendChild(table);
 }
 
-// Load Week 4 & Guardrail results when tab is shown
-const originalShowTab = window.showTab || function() {};
-window.showTab = function(id, btn) {
-  originalShowTab(id, btn);
-  if (id === 'tab-week4') {
-    loadWeek4Results();
-  }
-  if (id === 'tab-guardrails') {
-    loadGuardrailMetrics();
-    loadOutputTestResults();
-  }
-};
+
 
 // ── Guardrails & Output Testing Functions ────────────────────────────────────
 async function runGuardrailDemo(scenario) {
