@@ -379,7 +379,7 @@
     </button>
     <button class="nav-btn" onclick="showTab('tab-guardrails',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      🛡️ Guardrails & Output Testing
+      Guardrails & Output Testing
     </button>
   </div>
 
@@ -608,7 +608,7 @@
       </div>
 
       <div class="card">
-        <h2>📊 Visual Model Evaluation Comparison</h2>
+        <h2>Visual Model Evaluation Comparison</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
           Graphical analysis of model performance metrics, latency benchmarks, and quality trade-offs across CodeLlama, Qwen 2.5, and TinyLLaMA.
         </p>
@@ -758,7 +758,7 @@
     <!-- TAB 7: GUARDRAILS & AI OUTPUT TESTING -->
     <div id="tab-guardrails" class="tab">
       <div class="card">
-        <h2>🛡️ Application Guardrails & Controlled System Behavior</h2>
+        <h2>Application Guardrails & Controlled System Behavior</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px">
           Identifies situations where PolicyCheck AI may produce undesirable, unsupported, or inappropriate responses and enforces strict real-time guardrails (Input Length, Scope Filter, Prompt Injection Prevention, Retrieval Relevance Gate, and Output Groundedness Verification).
         </p>
@@ -792,23 +792,23 @@
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
           <button class="btn" onclick="runGuardrailDemo('out_of_scope')" style="background:#4f46e5;font-size:12px;padding:8px 16px">
-            🚫 Out-of-Scope (Python Code)
+            Out-of-Scope (Python Code)
           </button>
           <button class="btn" onclick="runGuardrailDemo('input_too_long')" style="background:#2563eb;font-size:12px;padding:8px 16px">
-            📏 Excessively Long Input (Spam)
+            Excessively Long Input (Spam)
           </button>
           <button class="btn" onclick="runGuardrailDemo('insufficient_info')" style="background:#d97706;font-size:12px;padding:8px 16px">
-            🔍 Insufficient Info (Foreign Tax)
+            Insufficient Info (Foreign Tax)
           </button>
           <button class="btn" onclick="runGuardrailDemo('prompt_injection')" style="background:#dc2626;font-size:12px;padding:8px 16px">
-            🛡️ Prompt Injection Attempt
+            Prompt Injection Attempt
           </button>
         </div>
 
         <div id="demo-comparison-area" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
           <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:18px">
             <div style="font-weight:800;font-size:14px;color:#991b1b;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-              <span>⚠️ Without Guardrail</span>
+              <span>Without Guardrail</span>
               <span style="font-size:11px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:12px">Problematic / Undesirable</span>
             </div>
             <div id="demo-without-output" style="font-size:13px;color:#7f1d1d;line-height:1.6">
@@ -818,7 +818,7 @@
 
           <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:18px">
             <div style="font-weight:800;font-size:14px;color:#166534;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-              <span>🛡️ With Guardrail</span>
+              <span>With Guardrail</span>
               <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:12px">Controlled / Safe</span>
             </div>
             <div id="demo-with-output" style="font-size:13px;color:#14532d;line-height:1.6">
@@ -872,7 +872,7 @@
 
       <!-- Section Visual Charts -->
       <div class="card">
-        <h2>📊 Visual Guardrail Effectiveness & Output Testing Metrics</h2>
+        <h2>Visual Guardrail Effectiveness & Output Testing Metrics</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
           Graphical analysis of guardrail block rates, classification metrics (Precision, Recall, F1), and AI output test pass rates across 6 compliance criteria.
         </p>
@@ -906,7 +906,7 @@
 
         <div style="margin-top:14px;margin-bottom:14px">
           <button class="btn" onclick="runOutputTestsNow()" style="background:var(--accent-indigo);font-size:12px;padding:8px 18px">
-            🔄 Re-Run AI Output Test Suite
+            Re-Run AI Output Test Suite
           </button>
         </div>
 
@@ -1474,7 +1474,7 @@ function renderWeek4ResultsTable(results, questions) {
             <td><strong>${r.correctness_score.toFixed(2)}</strong>/2</td>
             <td>${r.relevance_score.toFixed(2)}</td>
             <td>${r.latency_ms}ms</td>
-            <td>${r.hallucination ? '❌' : '✓'}</td>
+            <td>${r.hallucination ? 'Yes' : 'No'}</td>
             <td>${r.retrieval_quality?.retrieval_quality_score === 1 ? '✓' : '✗'}</td>
           </tr>
         `;
@@ -1511,7 +1511,7 @@ async function runGuardrailDemo(scenario) {
         ${esc(wOut.answer)}
       </div>
       <div style="margin-top:8px;font-size:11px;color:#991b1b">
-        ⚠️ <strong>Problem:</strong> System attempted to answer off-topic, ungrounded, or unsafe prompt without restriction. Wasted compute & risked hallucination.
+        <strong>Problem:</strong> System attempted to answer off-topic, ungrounded, or unsafe prompt without restriction. Wasted compute & risked hallucination.
       </div>
     `;
 
@@ -1526,7 +1526,7 @@ async function runGuardrailDemo(scenario) {
         ${esc(wWith.answer)}
       </div>
       <div style="margin-top:8px;font-size:11px;color:#166534">
-        ✅ <strong>Controlled Behavior:</strong> ${esc(wWith.reason)}
+        <strong>Controlled Behavior:</strong> ${esc(wWith.reason)}
       </div>
     `;
   } catch (err) {
@@ -1555,7 +1555,7 @@ async function doSandboxAsk() {
       <div style="background:${isBlocked ? '#fef2f2' : '#f0fdf4'};border:1px solid ${isBlocked ? '#fca5a5' : '#86efac'};border-radius:12px;padding:18px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <div style="font-weight:800;font-size:15px;color:${isBlocked ? '#991b1b' : '#166534'}">
-            ${isBlocked ? '🛑 GUARDRAIL ACTION: BLOCKED / SANITIZED' : '✅ GUARDRAIL ACTION: PASSED & ALLOWED'}
+            ${isBlocked ? 'GUARDRAIL ACTION: BLOCKED / SANITIZED' : 'GUARDRAIL ACTION: PASSED & ALLOWED'}
           </div>
           <span style="font-size:12px;font-weight:700;background:${isBlocked ? '#fee2e2' : '#dcfce7'};color:${isBlocked ? '#991b1b' : '#166534'};padding:4px 12px;border-radius:12px">
             ${esc(data.guardrail_status)} Stage: ${esc(data.blocked_stage || 'NONE')}
@@ -1614,7 +1614,7 @@ async function loadGuardrailMetrics() {
               <td><strong>${esc(r.expected_action)}</strong></td>
               <td><span style="color:#dc2626">${esc(r.without_guardrail.status)}</span></td>
               <td><span style="color:${r.with_guardrail.status === 'ALLOWED' ? '#059669' : '#dc2626'};font-weight:700">${esc(r.with_guardrail.status)}</span></td>
-              <td>${r.with_guardrail.is_controlled ? '✅ Controlled' : '❌ Failed'}</td>
+              <td>${r.with_guardrail.is_controlled ? 'Controlled' : 'Failed'}</td>
             </tr>
           `).join('')}
         </tbody>

@@ -727,22 +727,22 @@ def eval_examples():
     examples = []
     targets = [
         ("good_retrieval_correct_answer",
-         "✅ Good Retrieval → Correct Answer",
+         "Good Retrieval → Correct Answer",
          lambda r: r["correctness_score"] == 2
                    and r.get("retrieval_quality", {}).get("retrieval_quality_score") == 1
                    and r["question_id"] == "Q07"),
         ("good_retrieval_partial_answer",
-         "⚠️ Good Retrieval → Partial Answer",
+         "Good Retrieval → Partial Answer",
          lambda r: r["correctness_score"] == 1
                    and r.get("retrieval_quality", {}).get("retrieval_quality_score") == 1
                    and r["question_id"] == "Q11"),
         ("good_retrieval_wrong_answer",
-         "❌ Good Retrieval → Incorrect Answer",
+         "Good Retrieval → Incorrect Answer",
          lambda r: r["correctness_score"] == 0 and r["kb_supported"]
                    and not r.get("hallucination")
                    and r["question_id"] == "Q13"),
         ("hallucinated_answer",
-         "🚨 Hallucinated Answer",
+         "Hallucinated Answer",
          lambda r: r.get("hallucination") is True
                    and r["question_id"] == "Q09"),
     ]
@@ -990,27 +990,27 @@ def week4_data():
 
         scenarios = [
             ("correct_retrieval_correct_answer",
-             "✅ Good Retrieval → Correct Answer",
+             "Good Retrieval → Correct Answer",
              "Q07", "codellama:latest",
              lambda r: r["question_id"]=="Q07" and r["model"]=="codellama:latest"
                        and r["correctness_score"]==2),
             ("correct_retrieval_partial_answer",
-             "⚠️ Good Retrieval → Partial Answer",
+             "Good Retrieval → Partial Answer",
              "Q11", "codellama:latest",
              lambda r: r["question_id"]=="Q11" and r["model"]=="codellama:latest"
                        and r["correctness_score"]==1),
             ("correct_retrieval_wrong_answer",
-             "❌ Good Retrieval → Incorrect Answer",
+             "Good Retrieval → Incorrect Answer",
              "Q13", "codellama:latest",
              lambda r: r["question_id"]=="Q13" and r["model"]=="codellama:latest"
                        and r["correctness_score"]==0 and not r.get("hallucination")),
             ("hallucination",
-             "🚨 Hallucination Despite Retrieved Context",
+             "Hallucination Despite Retrieved Context",
              "Q09", "codellama:latest",
              lambda r: r["question_id"]=="Q09" and r["model"]=="codellama:latest"
                        and r.get("hallucination")),
             ("tinyllama_correct",
-             "🦙 TinyLlama — Correct Answer",
+             "TinyLlama — Correct Answer",
              "Q05", "tinyllama:1.1b",
              lambda r: r["question_id"]=="Q05" and r["model"]=="tinyllama:1.1b"
                        and r["correctness_score"]==2),
