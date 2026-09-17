@@ -94,12 +94,31 @@ def ask_policy(question: str, model: str = ""):
 def api_ask_direct(question: str, model: str = ""):
     """UI endpoint: direct LLM answer without any RAG context"""
     llm = model or LLM_MODEL
-    response = requests.post(
-        OLLAMA_URL,
-        json={"model": llm, "prompt": question, "stream": False}
-    )
-    result = response.json()
-    return {"question": question, "response": result["response"]}
+    actual_model = llm
+    try:
+        response = requests.post(
+            OLLAMA_URL,
+            json={"model": llm, "prompt": question, "stream": False},
+            timeout=120
+        )
+        if response.status_code != 200:
+            for fallback in ["qwen2.5:0.5b", "smollm:360m"]:
+                if fallback == llm:
+                    continue
+                fb_resp = requests.post(
+                    OLLAMA_URL,
+                    json={"model": fallback, "prompt": question, "stream": False},
+                    timeout=120
+                )
+                if fb_resp.status_code == 200:
+                    response = fb_resp
+                    actual_model = f"{fallback} (fallback from {llm})"
+                    break
+        response.raise_for_status()
+        result = response.json()
+        return {"question": question, "response": result.get("response", ""), "model": actual_model}
+    except Exception as e:
+        return {"question": question, "response": f"Error running model '{llm}': {str(e)}", "model": actual_model}
 
 
 # ── Exercise 3: RAG pipeline (embedded in app) ────────────────────────────────
@@ -184,6 +203,7 @@ Question:
 Answer:"""
 
     answer = ""
+    actual_model = llm
     try:
         llm_resp = requests.post(
             OLLAMA_URL,
@@ -192,6 +212,8 @@ Answer:"""
         )
         if llm_resp.status_code != 200:
             for fallback in ["qwen2.5:0.5b", "smollm:360m"]:
+                if fallback == llm:
+                    continue
                 fb_resp = requests.post(
                     OLLAMA_URL,
                     json={"model": fallback, "prompt": prompt, "stream": False},
@@ -199,6 +221,7 @@ Answer:"""
                 )
                 if fb_resp.status_code == 200:
                     llm_resp = fb_resp
+                    actual_model = f"{fallback} (fallback from {llm})"
                     break
         llm_resp.raise_for_status()
         answer = llm_resp.json().get("response", "")
@@ -212,6 +235,7 @@ Answer:"""
         "best_score": round(best_score, 4),
         "threshold": RELEVANCE_THRESHOLD,
         "answer": answer,
+        "model": actual_model,
     }
 
 
@@ -465,8 +489,18 @@ Question:
 
 Answer:"""
 
+    actual_model = llm
     try:
         resp = requests.post(OLLAMA_URL, json={"model": llm, "prompt": prompt, "stream": False}, timeout=120)
+        if resp.status_code != 200:
+            for fallback in ["qwen2.5:0.5b", "smollm:360m"]:
+                if fallback == llm:
+                    continue
+                fb_resp = requests.post(OLLAMA_URL, json={"model": fallback, "prompt": prompt, "stream": False}, timeout=120)
+                if fb_resp.status_code == 200:
+                    resp = fb_resp
+                    actual_model = f"{fallback} (fallback from {llm})"
+                    break
         resp.raise_for_status()
         answer = resp.json().get("response", "")
     except Exception as e:
